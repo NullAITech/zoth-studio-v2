@@ -12,6 +12,7 @@ const navItems = [
   { label: '21 Swarm', path: '/swarm' },
   { label: 'Bridges', path: '/bridges' },
   { label: '28 Tools', path: '/tools' },
+  { label: 'Memory', path: '/memory' },
   { label: 'Consensus', path: '/consensus' },
   { label: 'WebGen', path: '/webgen' },
   { label: 'HexStrike', path: '/hexstrike' },

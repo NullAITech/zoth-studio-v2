@@ -10,6 +10,7 @@ import ConsensusPage from './pages/ConsensusPage';
 import WebGenPage from './pages/WebGenPage';
 import HexStrikePage from './pages/HexStrikePage';
 import ZothOSPage from './pages/ZothOSPage';
+import MemoryPage from './pages/MemoryPage';
 import DocsPage from './pages/DocsPage';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/swarm" element={<SwarmPage />} />
           <Route path="/bridges" element={<BridgesPage />} />
           <Route path="/tools" element={<ToolsPage />} />
+          <Route path="/memory" element={<MemoryPage />} />
           <Route path="/consensus" element={<ConsensusPage />} />
           <Route path="/webgen" element={<WebGenPage />} />
           <Route path="/hexstrike" element={<HexStrikePage />} />
