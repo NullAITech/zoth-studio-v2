@@ -464,7 +464,7 @@ Runs local invariant verification before staging tools.`
                   mb: 3
                 }}
               >
-                Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
+                Comprehensive architectural blueprint for Zoth Studio v2: local-first agent orchestration,
                 biomorphic STDP synaptic memory, Lucy Cognitive Oracle, 3-agent Byzantine consensus,
                 Adytum Hardware Sanctum, and production Netlify deployment with 72 prerendered static routes.
               </Typography>
@@ -819,7 +819,7 @@ Runs local invariant verification before staging tools.`
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Zoth Studio v2 is the air-gapped operator desk for sovereign AI agent development.
+                    Zoth Studio v2 is the local-first operator desk for sovereign AI agent development.
                     Integrating 24 dedicated workstations, 25 in-browser micro-tools, Lucy Oracle STDP
                     synaptic memory, 3-agent Byzantine consensus, and the Adytum Hardware Sanctum,
                     all execution runs strictly on physical hardware via local loopback enclaves (
@@ -965,7 +965,7 @@ npm run dev`}
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Published micro-tools clone cleanly with <code>npm run zoth -- pull &lt;repo-name&gt;</code>.
-                    Each micro-tool operates air-gapped with zero telemetry.
+                    Each micro-tool operates local-first with zero telemetry.
                   </Typography>
 
                   {/* Grid of Micro Tools */}
@@ -1734,7 +1734,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 30 micro-tools into your global PATH.
+                    Essential operations for running Zoth Studio as a local-first desktop workstation, configuring local Ollama models with zero egress, and installing the 30 micro-tools into your global PATH.
                   </Typography>
 
                   {/* 1. Electron Desktop Workstation */}
@@ -1816,7 +1816,7 @@ envguard --help`}
             subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 24 workstations, and bare-metal OS hypervisors."
             toolTitle="Option 1: Zero-Egress CLI Suite"
             toolTag="DOCS &amp; RUNTIME"
-            toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
+            toolDescription="Download the local-first documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
             toolRepo="https://github.com/NullAITech/zoth-studio-v2"
             toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"
             sx={{ mt: 6 }}

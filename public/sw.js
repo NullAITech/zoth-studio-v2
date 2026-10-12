@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Zoth Studio v2 - Sovereign Air-Gapped Service Worker
+   Zoth Studio v2 - Sovereign Local-First Service Worker
    Architecture: Zero-Cloud / Zero-Egress Offline Resilience
    Strategy: Cache-First / Stale-While-Revalidate with Clean Shell Fallback
    ========================================================================== */
@@ -91,7 +91,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Air-Gapped Zero-Cloud Policy:
+  // 3. Local-First Zero-Cloud Policy:
   // If external origin (non-same-origin), prevent cloud egress and return offline synthetic fallback.
   if (url.origin !== self.location.origin) {
     event.respondWith(
@@ -138,7 +138,7 @@ self.addEventListener('fetch', (event) => {
             const indexShell = await caches.match('/index.html');
             if (indexShell) return indexShell;
             return new Response(
-              '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Zoth Studio // Offline</title></head><body style="background:#08080B;color:#D4AF37;font-family:sans-serif;padding:2rem;"><h2>Offline Sovereign Shell</h2><p>Zoth Studio is operating in air-gapped offline mode.</p></body></html>',
+              '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Zoth Studio // Offline</title></head><body style="background:#08080B;color:#D4AF37;font-family:sans-serif;padding:2rem;"><h2>Offline Sovereign Shell</h2><p>Zoth Studio is operating in local-first offline mode.</p></body></html>',
               {
                 status: 200,
                 headers: { 'Content-Type': 'text/html; charset=utf-8' },

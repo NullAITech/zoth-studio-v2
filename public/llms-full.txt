@@ -134,7 +134,7 @@ SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
 24. math-pillars: Six Mathematical Pillars Academy - formal mathematical foundations and proofs.
 
 ================================================================================
-SECTION 6: 30 AIR-GAPPED MICRO-TOOLS DIRECTORY
+SECTION 6: 30 LOCAL-FIRST MICRO-TOOLS DIRECTORY
 ================================================================================
 
 1. adytum-alchemist-ai-workflow: 22-key hermetic planning rite and incubation gate.

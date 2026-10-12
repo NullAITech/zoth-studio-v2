@@ -29,7 +29,7 @@ export const siteConfig = {
     'local LLM orchestration',
     'Ollama model foundry',
     'autonomous agent DAG composer',
-    'air-gapped AI workspace',
+    'local-first AI workspace',
     'React MUI studio v2',
     'Zoth Studio'
   ],
@@ -37,7 +37,7 @@ export const siteConfig = {
     '/': {
       title: 'Zoth Studio // Sovereign Agent Development Studio & Pantheon Matrix',
       description: 'Zero-egress development studio for autonomous AI agent pantheons, local model orchestration, and hardware-secured sovereign intelligence.',
-      keywords: 'Zoth Studio, sovereign AI, agent pantheon, zero egress studio, air-gapped agent development',
+      keywords: 'Zoth Studio, sovereign AI, agent pantheon, zero egress studio, local-first agent development',
       type: 'website',
     },
     '/adytum': {
@@ -60,14 +60,14 @@ export const siteConfig = {
     },
     '/arsenal': {
       title: 'The Sovereign Arsenal // Unified Command Matrix & Developer Catalog',
-      description: 'Unified master directory consolidating 47 sovereign assets: air-gapped developer cockpits, standalone micro-tools, and hardware enclaves.',
+      description: 'Unified master directory consolidating 47 sovereign assets: local-first developer cockpits, standalone micro-tools, and hardware enclaves.',
       keywords: 'sovereign arsenal, zoth catalog, developer cockpits, sovereign micro tools, hardware enclaves',
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Arsenal // 30 Air-Gapped Micro-Tools & Repos',
+      title: 'Sovereign Tool Arsenal // 30 Local-First Micro-Tools & Repos',
       description: 'Explore 30 standalone, schema-validated developer tools for website generation, social syndication, recon mapping, and 3D modeling.',
-      keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, air-gapped tools',
+      keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, local-first tools',
       type: 'article',
     },
     '/workstations': {
@@ -103,7 +103,7 @@ export const siteConfig = {
     '/zoth-os': {
       title: 'Zoth OS // KVM Hypervisor Sandbox & WebContainer Runtime',
       description: 'Hardware-isolated Linux KVM virtualization, thin QEMU disk management, and edge dispatch inside sovereign enclaves.',
-      keywords: 'Zoth OS, KVM sandbox, QEMU virtualization, WebContainer, air-gapped OS',
+      keywords: 'Zoth OS, KVM sandbox, QEMU virtualization, WebContainer, local-first OS',
       type: 'article',
     },
     '/docs': {
@@ -166,7 +166,7 @@ export function getRouteMeta(path = '/') {
     if (tool) {
       return {
         title: `${tool.name} // Zoth Sovereign Developer Tool`,
-        description: `${tool.description} Schema-validated air-gapped utility running inside Zoth Studio v2.`,
+        description: `${tool.description} Schema-validated local-first utility running inside Zoth Studio v2.`,
         keywords: `${tool.name}, ${(tool.tags || [tool.category, tool.executionType]).filter(Boolean).join(', ')}, Zoth Studio tool, zero-egress developer utility`,
         type: 'article'
       };
@@ -181,7 +181,7 @@ export function getRouteMeta(path = '/') {
       return {
         title: `${station.name} // Zoth Studio Workstation`,
         description: `Sovereign interactive workstation for ${station.name} (${station.band}). Decoupled and rendered directly in Zoth Studio v2.`,
-        keywords: `${station.name}, ${station.band}, Zoth workstation, air-gapped console`,
+        keywords: `${station.name}, ${station.band}, Zoth workstation, local-first console`,
         type: 'article'
       };
     }

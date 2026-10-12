@@ -669,7 +669,7 @@ export default function RealToolWorkspacePage() {
                   Interactive Enclave Workstation
                 </Typography>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: isLocal ? '#34D399' : gold.soft, fontWeight: 700 }}>
-                  {isLocal ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE' : 'AIR-GAPPED SIMULATION HARNESS · ZERO EGRESS'}
+                  {isLocal ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE' : 'LOCAL-FIRST SIMULATION HARNESS · ZERO EGRESS'}
                 </Typography>
               </Box>
             </Box>

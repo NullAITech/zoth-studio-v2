@@ -222,7 +222,7 @@ export default function ZothOSPage() {
     {
       id: 'bitwarden',
       name: 'Bitwarden CLI',
-      desc: 'Air-Gapped Encrypted Password & Secrets Vault',
+      desc: 'Local-First Encrypted Password & Secrets Vault',
       icon: LockIcon,
       installed: hostInfo?.installedTools?.bitwarden,
       tag: 'CREDENTIAL VAULT',
@@ -289,7 +289,7 @@ export default function ZothOSPage() {
       type: 'system',
       text: [
         'ZOTH SOVEREIGN OS v3.2.0-RELEASE (x86_64 Hardened Microkernel)',
-        'Built with Zero-Egress Invariant & Air-Gapped Cryptographic Enclaves.',
+        'Built with Zero-Egress Invariant & Local-First Cryptographic Enclaves.',
         'Type "help" to inspect commands or execute "zoth boot --kvm" to run virtual boot sequence.',
       ].join('\n'),
     },
@@ -670,7 +670,7 @@ export default function ZothOSPage() {
           '  ollama list                   Display local quantized models registered in sandbox',
           '  cat /etc/zoth/invariants.conf Print sovereign security manifest & network policy',
           '  free -h                       Display hardware RAM buffer, KVM heap, & swap status',
-          '  ls -la /enclaves              Inspect air-gapped cryptographic filesystem mounts',
+          '  ls -la /enclaves              Inspect local-first cryptographic filesystem mounts',
           '  clear                         Clear terminal screen buffer',
         ].join('\n'),
       });
@@ -865,7 +865,7 @@ export default function ZothOSPage() {
               <HeroItem>
                 <Chip
                   icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
-                  label="SOVEREIGN LOCAL OPERATING SYSTEM // AIR-GAPPED KERNEL"
+                  label="SOVEREIGN LOCAL OPERATING SYSTEM // LOCAL-FIRST KERNEL"
                   size="small"
                   sx={{
                     bgcolor: gold.wash,
@@ -972,7 +972,7 @@ export default function ZothOSPage() {
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
                       {hostInfo?.isZothOS
-                        ? 'Air-gapped hardware microkernel & zero-egress packet filter active'
+                        ? 'Local-first hardware microkernel & zero-egress packet filter active'
                         : 'Operating in offline browser preview mode — full telemetry active on ZothOS'}
                     </Typography>
                   </Box>
@@ -1833,7 +1833,7 @@ export default function ZothOSPage() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <TerminalIcon sx={{ color: gold.accent }} />
                   <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    Air-Gapped Privacy
+                    Local-First Privacy
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
@@ -2231,7 +2231,7 @@ export default function ZothOSPage() {
         <RevealOnScroll preset="fadeUp" delay={0.6}>
           <SovereignFunnel
             title="Deploy Sovereign Zoth OS to Hardware"
-            subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
+            subtitle="Zero-telemetry local-first operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
             toolTitle="Option 1: Zoth CLI & Bootable ISO"
             toolTag="CLI & BARE METAL"
             toolDescription="Download and flash bootable Zoth OS image (zothos-3.2-amd64.iso) for direct bare-metal deployment, or check your machine with the Zoth CLI."

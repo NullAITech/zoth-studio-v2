@@ -171,7 +171,7 @@ export default function ZothOSShowcasePage() {
     },
     {
       role: 'Privacy-First Developers & Researchers',
-      desc: 'Air-gapped operation, hardware zero-egress invariants, and amnesic runtime profiles to ensure proprietary IP never leaves your machine.',
+      desc: 'Local-first operation, hardware zero-egress invariants, and amnesic runtime profiles to ensure proprietary IP never leaves your machine.',
     },
     {
       role: 'Operators Seeking Turnkey Sovereignty',
