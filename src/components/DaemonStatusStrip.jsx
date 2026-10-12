@@ -29,14 +29,14 @@ export default function DaemonStatusStrip() {
   const { status, error } = useStudioStatus();
   const services = status ? Object.values(status.services) : [];
 
-  // When viewed on public website (e.g. zoth.nullai.tech), daemons run air-gapped on the operator's bare-metal node
+  // When viewed on public website (e.g. zoth.nullai.tech), daemons run local-first on the operator's bare-metal node
   if (!isLocal) {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mb: 3 }}>
         <Chip
           icon={<PublicIcon sx={{ fontSize: '0.85rem !important', color: dark ? '#38BDF8' : '#0369A1' }} />}
           size="small"
-          label="PUBLIC WEB MIRROR · AIR-GAPPED FROM BARE-METAL DAEMONS"
+          label="PUBLIC WEB MIRROR · LOCAL-FIRST FROM BARE-METAL DAEMONS"
           sx={{
             fontWeight: 800,
             fontFamily: mono,

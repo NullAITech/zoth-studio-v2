@@ -686,7 +686,7 @@ function ChronicleWorkstation() {
   const milestones = [
     { id: 'M-1', track: 'Consensus', title: 'Byzantine 3-Agent Triangulation AST Engine', status: 'Shipped', progress: 100, target: 'v2.0-Alpha', hash: 'e3b0c44298fc1c14' },
     { id: 'M-2', track: 'Memory & AI', title: 'Lucy Oracle STDP Synaptic Weight Plasticity Core', status: 'Shipped', progress: 100, target: 'v2.0-GA', hash: '8f434346648f6b96' },
-    { id: 'M-3', track: 'Enclaves', title: 'Adytum Hardware Vault & AES-256-GCM Air-Gapped Store', status: 'Shipped', progress: 100, target: 'v2.0-GA', hash: 'd4735e3a265e16ee' },
+    { id: 'M-3', track: 'Enclaves', title: 'Adytum Hardware Vault & AES-256-GCM Local-First Store', status: 'Shipped', progress: 100, target: 'v2.0-GA', hash: 'd4735e3a265e16ee' },
     { id: 'M-4', track: 'Spatial 3D', title: 'Nexus WebGL Scene Studio & 3D Interactive Omniverse', status: 'Active Sprint', progress: 85, target: 'v2.1', hash: '356a192b7913b04c' },
     { id: 'M-5', track: 'Consensus', title: 'Cross-Agent ZeroMQ IPC Bus with P2P Heartbeats', status: 'Active Sprint', progress: 90, target: 'v2.1', hash: 'da4b9237bacccdf1' },
     { id: 'M-6', track: 'Enclaves', title: 'Zero-Egress WASI Native Binary Cross-Compiler (Edge Forge)', status: 'Horizon Spec', progress: 40, target: 'v2.2', hash: '77de68daecd823b7' },
@@ -1000,7 +1000,7 @@ function ConnectorsWorkstation() {
             </Paper>
 
             <Alert severity="info" sx={{ mt: 2, fontSize: '0.8rem' }}>
-              All connectors enforce strictly air-gapped IPC Unix sockets or 127.0.0.1 bindings.
+              All connectors enforce strictly local-first IPC Unix sockets or 127.0.0.1 bindings.
             </Alert>
           </Paper>
         </Grid>
@@ -1207,7 +1207,7 @@ function EdgeForgeWorkstation() {
     { id: 'wasm32-wasi', name: 'WebAssembly WASI', desc: 'Zero-sandbox deterministic edge micro-enclave', size: '1.8 MB' },
     { id: 'x86_64-linux', name: 'Linux x86_64 Musl', desc: 'Static binary with zero glibc dependencies', size: '3.4 MB' },
     { id: 'aarch64-linux', name: 'ARM64 Musl (RPi/Edge)', desc: 'Embedded low-power autonomous drone/edge', size: '3.1 MB' },
-    { id: 'esp32s3-none', name: 'ESP32-S3 Xtensa Bare-metal', desc: 'Hardware air-gapped cryptographic enclave', size: '480 KB' },
+    { id: 'esp32s3-none', name: 'ESP32-S3 Xtensa Bare-metal', desc: 'Hardware local-first cryptographic enclave', size: '480 KB' },
   ];
 
   const handleBuild = () => {
@@ -1346,7 +1346,7 @@ function Web3HubWorkstation() {
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: 800 }}>Air-Gapped Key &amp; Offline Signer</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800 }}>Local-First Key &amp; Offline Signer</Typography>
               <Button size="small" variant="contained" color="primary" onClick={handleGenKey} sx={{ fontWeight: 750 }}>
                 Generate Offline Ed25519 Key
               </Button>
@@ -1363,7 +1363,7 @@ function Web3HubWorkstation() {
 
             <Box sx={{ mb: 3 }}>
               <Typography variant="caption" sx={{ fontWeight: 750, color: 'text.secondary', display: 'block', mb: 0.5 }}>
-                Private Key Seed (Air-Gapped In-Memory)
+                Private Key Seed (Local-First In-Memory)
               </Typography>
               <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.85rem', bgcolor: isDark ? '#08080B' : '#FEF2F2', border: isDark ? '1px solid rgba(244,63,94,0.2)' : '1px solid #FECACA', color: isDark ? '#F87171' : '#B91C1C', wordBreak: 'break-all' }}>
                 {privKey}
@@ -1428,7 +1428,7 @@ function Web3HubWorkstation() {
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="body2" color="text.secondary">Air-Gapped Policy</Typography>
+                <Typography variant="body2" color="text.secondary">Local-First Policy</Typography>
                 <Chip label="Zero-Egress Spec" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
               </Box>
             </Stack>
@@ -1674,10 +1674,10 @@ function HubWorkstationConsole({ station }) {
   const hubSpecs = {
     'hexstrike': {
       title: 'HEXSTRIKE // Offensive Security Terminal',
-      desc: 'Interactive offensive terminal, loopback CVE radar, and air-gapped vulnerability auditing matrix.',
+      desc: 'Interactive offensive terminal, loopback CVE radar, and local-first vulnerability auditing matrix.',
       target: '/hexstrike',
       badge: 'Security Enclave',
-      stats: [{ label: 'Loopback Ports', val: '64/64 Scanned' }, { label: 'Security Score', val: '98/100' }, { label: 'Air-Gapped', val: 'VERIFIED' }],
+      stats: [{ label: 'Loopback Ports', val: '64/64 Scanned' }, { label: 'Security Score', val: '98/100' }, { label: 'Local-First', val: 'ON' }],
     },
     'consensus': {
       title: 'Consensus Battle Arena & Byzantine Triangulation',
@@ -1726,7 +1726,7 @@ function HubWorkstationConsole({ station }) {
       desc: 'Hardware-isolated Linux virtual operating system with browser-side WebContainer execution.',
       target: '/zoth-os',
       badge: 'Hypervisor',
-      stats: [{ label: 'Hypervisor', val: 'vOS WebContainer' }, { label: 'RAM Allocated', val: '512 MB' }, { label: 'FS Isolated', val: 'Air-Gapped' }],
+      stats: [{ label: 'Hypervisor', val: 'vOS WebContainer' }, { label: 'RAM Allocated', val: '512 MB' }, { label: 'FS Isolated', val: 'Local-First' }],
     },
     'math-pillars': {
       title: 'Zoth AI Math Pillars & Theory Academy',
@@ -1747,7 +1747,7 @@ function HubWorkstationConsole({ station }) {
       desc: 'Full-spectrum swarm oversight console with task dispatchers, agent status matrices, and health monitors.',
       target: '/swarm',
       badge: 'Mission Control',
-      stats: [{ label: 'Telemetry Bus', val: 'Air-Gapped IPC' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
+      stats: [{ label: 'Telemetry Bus', val: 'Local-First IPC' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
     },
     'site-generator': {
       title: 'WebGen Autonomous Site Generator',
@@ -1907,7 +1907,7 @@ function UniversalEnclaveConsole({ station }) {
                 </Typography>
               </Box>
               <Chip
-                label="AIR-GAPPED HARDWARE ENCLAVE"
+                label="LOCAL-FIRST HARDWARE ENCLAVE"
                 size="small"
                 sx={{
                   fontFamily: mono,
@@ -2091,7 +2091,7 @@ export default function WorkstationDetailPage() {
     entropy: '7.991',
     loopbackPackets: 18420,
     egressDrop: '100% (0 B egress)',
-    status: 'AIR-GAPPED // OPTIMAL',
+    status: 'LOCAL-FIRST // OPTIMAL',
   });
 
   useEffect(() => {
@@ -2368,7 +2368,7 @@ export default function WorkstationDetailPage() {
         subtitle={`Run this sovereign capability locally with complete zero-telemetry air-gap guarantees. Install standalone via the Zoth CLI, spin up within the unified Studio cockpit, or boot into bare-metal Zoth OS.`}
         toolTitle={`Standalone ${station.name}`}
         toolTag={station.band?.toUpperCase() || "WORKSTATION"}
-        toolDescription={`Air-gapped micro-enclave runtime for ${station.name} (${station.id}). Binds strictly to loopback 127.0.0.1 with zero cloud egress sockets.`}
+        toolDescription={`Local-first micro-enclave runtime for ${station.name} (${station.id}). Binds strictly to loopback 127.0.0.1 with zero cloud egress sockets.`}
         toolRepo="https://github.com/NullAITech/zoth-studio-v2"
         toolCommand={`zoth open ${station.id}`}
         sx={{ mt: 6 }}

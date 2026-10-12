@@ -214,7 +214,7 @@ export function AdytumPlannerTool() {
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontFamily: mono }}>
                 // EVALUATION TELEMETRY DECK
               </Typography>
-              <Chip label="AIR-GAPPED WASM" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800, fontSize: '0.65rem', fontFamily: mono }} />
+              <Chip label="LOCAL-FIRST WASM" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800, fontSize: '0.65rem', fontFamily: mono }} />
             </Box>
 
             <Box sx={{ p: 2, flexGrow: 1, bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#F1F5F9', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, fontFamily: mono, fontSize: '0.8rem', color: theme.palette.text.primary, mb: 2 }}>
@@ -276,7 +276,7 @@ export function AzothArchonTool() {
   const [running, setRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [logs, setLogs] = useState([
-    '[Client Sandbox] Archon Orchestrator ready in air-gapped evaluation mode',
+    '[Client Sandbox] Archon Orchestrator ready in local-first evaluation mode',
     '[Archon] Subagent delegation roles active: Athena (Lexer), Vulcan (Transpiler), Cerberus (Sentinel)'
   ]);
 
@@ -310,7 +310,7 @@ export function AzothArchonTool() {
 
       setTimeout(() => {
         setActiveStep(4);
-        setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser air-gapped']);
+        setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser local-first']);
         setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx @nullaitech/zoth pull azoth-local-agent)']);
         setRunning(false);
       }, 1200);
@@ -1038,7 +1038,7 @@ PARAMETER temperature 0.70
 PARAMETER top_p 0.90
 SYSTEM """
 ROLE: ${role}
-ENVIRONMENT: Zero-Egress Air-Gapped Local Silicon (127.0.0.1)
+ENVIRONMENT: Zero-Egress Local-First Local Silicon (127.0.0.1)
 OPTIMIZATION: ${dspy ? 'DSPy MIPROv2 Telemetry-Free Exemplars' : 'Standard Baseline'}
 
 INVARIANTS:
@@ -1117,7 +1117,7 @@ export function HexStrikeTool() {
   const [scanning, setScanning] = useState(false);
   const [cmdInput, setCmdInput] = useState('');
   const [terminalLines, setTerminalLines] = useState([
-    'NullAI HexStrike Security Terminal v3.2.0 [Air-Gapped Mode]',
+    'NullAI HexStrike Security Terminal v3.2.0 [Local-First Mode]',
     'Type "help" or "scan" to execute loopback vulnerability audits.'
   ]);
 
@@ -1468,7 +1468,7 @@ export function AeoGraphEngineTool() {
                 https://zoth.nullai.tech
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-                Air-gapped development studio featuring 24 workstations, 30 sovereign tools, biomorphic STDP memory, and Byzantine consensus triangulation.
+                Local-first development studio featuring 24 workstations, 30 sovereign tools, biomorphic STDP memory, and Byzantine consensus triangulation.
               </Typography>
             </Paper>
           </Paper>
@@ -1545,7 +1545,7 @@ export function SubSweepTool() {
         SubSweep Reconnaissance &amp; Attack Surface Scanner
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Subdomain mapping and air-gapped infrastructure footprint analyzer.
+        Subdomain mapping and local-first infrastructure footprint analyzer.
       </Typography>
 
       <TableContainer component={Paper} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
@@ -7612,7 +7612,7 @@ export function LikenessDeskTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Air-Gapped Local Video Double · Wav2Lip GAN &amp; Chatterbox Turbo TTS
+          Local-First Local Video Double · Wav2Lip GAN &amp; Chatterbox Turbo TTS
         </Typography>
       </Box>
 

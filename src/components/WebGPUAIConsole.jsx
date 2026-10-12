@@ -338,7 +338,7 @@ export default function WebGPUAIConsole() {
                 {isGenerating
                   ? 'WEBGPU STREAMING INFERENCE ACTIVE'
                   : generationMeta?.isLocked
-                  ? '🔒 NEURAL WEIGHTS AIR-GAPPED / LOCKED'
+                  ? '🔒 NEURAL WEIGHTS LOCAL-FIRST / LOCKED'
                   : 'INFERENCE COMPLETE · RECORD SEALED'}
               </Typography>
             </Box>

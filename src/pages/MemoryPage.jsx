@@ -1276,7 +1276,7 @@ export default function MemoryPage() {
       ctx.font = '9px "JetBrains Mono"';
       ctx.fillStyle = '#00F0FF';
       ctx.textAlign = 'left';
-      ctx.fillText('HOLOPROJECTOR // ZERO-EGRESS AIR-GAPPED', 18, 25);
+      ctx.fillText('HOLOPROJECTOR // ZERO-EGRESS LOCAL-FIRST', 18, 25);
       ctx.fillStyle = '#D4AF37';
       ctx.fillText(`CARRIER RESONANCE: ${carrierFreq}Hz ${isMuted ? '[MUTED]' : '[ACTIVE]'}`, 18, 40);
       ctx.fillText(`ORBIT: YAW ${(yaw * 57.3).toFixed(1)}° · PITCH ${(pitch * 57.3).toFixed(1)}°`, 18, 55);
@@ -2415,7 +2415,7 @@ export default function MemoryPage() {
         )}
 
         {/* ==========================================================================
-           TAB 3: LUCY 3D ORACLE CHAMBER (ZERO-EGRESS AIR-GAPPED HOLOGRAPHIC PROJECTOR)
+           TAB 3: LUCY 3D ORACLE CHAMBER (ZERO-EGRESS LOCAL-FIRST HOLOGRAPHIC PROJECTOR)
            ========================================================================== */}
         {activeTab === 3 && (
           <Box>
@@ -2657,7 +2657,7 @@ export default function MemoryPage() {
           <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
             <Chip label={`${memories.length} Vector Nodes`} size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontFamily: mono, fontWeight: 750 }} />
             <Chip label={`Carrier: ${carrierFreq}Hz`} size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: isDark ? '#00F0FF' : '#0369A1', fontFamily: mono, fontWeight: 750 }} />
-            <Chip label="Air-Gapped Zero-Egress Verified" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontWeight: 750 }} />
+            <Chip label="Local-First" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontWeight: 750 }} />
           </Box>
 
           <Paper

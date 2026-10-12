@@ -1,7 +1,7 @@
 {
   "name": "Zoth Studio v2",
   "short_name": "Zoth Studio",
-  "description": "Air-gapped, zero-egress sovereign development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices.",
+  "description": "Local-first, zero-egress sovereign development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

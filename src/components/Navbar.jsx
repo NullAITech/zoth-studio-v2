@@ -1649,7 +1649,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               />
             </Box>
             <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', display: 'block', fontSize: '0.72rem', lineHeight: 1.4 }}>
-              Air-Gapped Architecture · Zero External Egress
+              Local-First Architecture · Zero External Egress
             </Typography>
           </Box>
         </Box>

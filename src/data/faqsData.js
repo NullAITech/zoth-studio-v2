@@ -9,10 +9,10 @@ export const FAQS_DATA = [
     id: 'zero-egress-invariant',
     q: 'What is the Zero-Egress Invariant architecture and how does Zoth Studio guarantee privacy?',
     category: 'Architecture',
-    keywords: ['zero-egress', 'zero egress', 'invariant', 'privacy', 'telemetry', 'air-gapped', 'client-side', 'security', 'isolation', 'tracking'],
+    keywords: ['zero-egress', 'zero egress', 'invariant', 'privacy', 'telemetry', 'local-first', 'client-side', 'security', 'isolation', 'tracking'],
     a: `The Zero-Egress Invariant is Zoth Studio v2's foundational security axiom: all code transformations, token embeddings, cryptographic key derivations, and multi-agent state deliberations run strictly client-side on the operator's local machine.
 
-No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration routes exist within the studio. Prompts, syntax trees, secrets, and tool outputs never leave the local environment under any operational circumstance, making the studio safe for proprietary code, security audits, and air-gapped environments.`,
+No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration routes exist within the studio. Prompts, syntax trees, secrets, and tool outputs never leave the local environment under any operational circumstance, making the studio safe for proprietary code, security audits, and local-first environments.`,
     summary: 'Zero-Egress guarantees that 100% of code execution, model inference, and state mutations stay local. No external servers or third-party telemetry beacons are permitted.',
     oracleResponse: 'Zero-Egress is absolute: 100% of prompt context, token emission, and agent state is computed locally on client hardware with zero outbound network calls.',
     jumpTargets: [
@@ -261,14 +261,14 @@ Agents transmit typed messages across unidirectional event channels, signing pay
     id: 'offline-pwa-service-worker',
     q: 'Can Zoth Studio run completely offline without an internet connection?',
     category: 'CLI & Deployment',
-    keywords: ['offline', 'air-gapped', 'pwa', 'cache', 'service worker', 'local', 'disconnected'],
+    keywords: ['offline', 'local-first', 'pwa', 'cache', 'service worker', 'local', 'disconnected'],
     a: `Yes. Zoth Studio is built from the ground up for sovereign, offline-first reliability.
 
 Once loaded or saved locally:
 • All 30 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
 • Static routing and state persistence rely entirely on browser-native storage (IndexedDB, Web Crypto, and local caches).
 • No remote API tokens or internet connections are required to run security audits, compile regexes, test WCAG contrast, or simulate multi-agent consensus.`,
-    summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and air-gapped readiness.',
+    summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and local-first readiness.',
     oracleResponse: 'Zoth Studio operates 100% offline with bundled assets and local storage, requiring zero external internet connection for all core tools.',
     jumpTargets: [
       { label: 'HexStrike Security Enclave', path: '/hexstrike', type: 'security' },

@@ -644,7 +644,7 @@ export default function ToolsPage() {
               </Box>
             </Box>
             <Chip
-              label="100% ZERO-EGRESS AIR-GAPPED"
+              label="100% ZERO-EGRESS LOCAL-FIRST"
               size="small"
               sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.accent}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
             />

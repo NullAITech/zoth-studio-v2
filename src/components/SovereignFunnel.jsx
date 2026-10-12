@@ -300,7 +300,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.5 }}>
-              Bare-metal air-gapped operating system kernel for autonomous agent swarms, zero-telemetry hardware enclave execution, and cryptographic seals.
+              Bare-metal local-first operating system kernel for autonomous agent swarms, zero-telemetry hardware enclave execution, and cryptographic seals.
             </Typography>
 
             <Box
