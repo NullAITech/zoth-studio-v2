@@ -7,7 +7,7 @@ Contact: team@nullai.tech
 
 /* SITE */
 Software: Zoth Studio v2
-Architecture: Air-Gapped Sovereign AI Agent Studio
+Architecture: Local-First Sovereign AI Agent Studio
 Standards: HTML5, CSS3, ES2022, React 19.3, Vite, MUI v5, WebGPU WGSL, Three.js
 Zero-Egress: 100% Local Silicon, Zero Cloud Telemetry
 Canonical: https://zoth.nullai.tech
