@@ -375,7 +375,7 @@ export async function runZothAIModel({ prompt, systemPrompt, model = 'zoth-ai', 
       tokensGenerated: 0,
       elapsedMs,
       throughput: '0.0 tok/s',
-      egress: '0 bytes (Air-Gapped / In-Browser Hardware Verified)',
+      egress: '0 bytes (runs in-browser)',
     };
   }
 
