@@ -125,7 +125,7 @@ export default function AgentVoiceCallGodModeTool() {
       sttEngine: 'whisper.cpp (ggml-base.en-q5_1)',
       ttsEngine: activeVoice.label,
       vadGate: vadThreshold,
-      operatorContact: '(948) 204-7987',
+      operatorContact: '(555) 555-0199',
       utteranceBuffer: utterance,
     },
     null,

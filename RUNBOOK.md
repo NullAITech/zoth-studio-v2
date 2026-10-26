@@ -3,7 +3,7 @@
 > **Classification**: Sovereign Local Autonomous Infrastructure  
 > **Host**: Debian 13 (trixie) | Intel Xeon E-2176M (6c/12t) | 32 GB DDR4 | NVIDIA GP107GLM [Quadro P1000 Mobile 4GB]  
 > **Security Boundary**: Zero-Egress Invariant — strictly `127.0.0.1` loopback bindings only. Never `0.0.0.0`.  
-> **Registry Truth**: `/home/zoth/NullAITech/zoth-studio-v2/public/api/tools.json` (65 tools, 0 port collisions)  
+> **Registry Truth**: `~/NullAITech/zoth-studio-v2/public/api/tools.json` (65 tools, 0 port collisions)  
 
 ---
 
@@ -44,7 +44,7 @@ ZothOS operates as a sovereign, zero-external-dependency local developer and age
 ### Core Invariants:
 1. **Zero-Egress Protocol**: Every daemon, HTTP server, and websocket listener MUST explicitly bind to `127.0.0.1`. Any attempt to bind `0.0.0.0` or open external WAN sockets is prohibited.
 2. **FinOps Gate**: All automated coding and swarm agent calls to OpenAI-compatible APIs pass through the sentinel proxy on `http://127.0.0.1:8111/v1`. If spend exceeds $5.00 or velocity exceeds $2.00/min, the breaker trips to `OPEN`, immediately cutting off API egress.
-3. **Execution Sandbox**: Muse coding agent runs in bubblewrap (`bwrap`) out of `/opt/muse/` with root isolated from `/home/zoth` to preserve sandbox integrity.
+3. **Execution Sandbox**: Muse coding agent runs in bubblewrap (`bwrap`) out of `/opt/muse/` with root isolated from `$HOME` to preserve sandbox integrity.
 
 ---
 
