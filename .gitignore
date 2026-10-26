@@ -5,7 +5,9 @@ dist-*/
 release-artifacts/
 .DS_Store
 *.log
-/tools/
+/tools/*
+!/tools/virustotal-release.sh
+!/tools/scan-secrets.sh
 .zoth/
 
 # Old original site backend and build artifacts

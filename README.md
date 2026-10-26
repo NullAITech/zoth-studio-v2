@@ -10,6 +10,11 @@
 > *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 71 ecosystem tools (43 dedicated God Mode workstations + sovereign enclaves), 73/73 supervised fleet endpoints (`ensure_fleet.py`), Zoth Bolt (`:5173` — built on open-source `bolt.diy`) + Zoth QuickSite Starter (`:8092`), 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana DePay), and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
+[![Supply Chain Trust](https://img.shields.io/badge/Supply%20Chain-SLSA%20%2B%20SBOM%20%2B%20VirusTotal-10b981?style=flat-square&logo=virustotal&logoColor=white)](docs/TRUST.md)
+[![Cosign Signed Releases](https://img.shields.io/badge/Releases-v2.1.0%20cosign%20signed-blue?style=flat-square&logo=sigstore&logoColor=white)](docs/VERIFYING.md)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/NullAITech/zoth-studio-v2/badge)](https://scorecard.dev/viewer/?repo=github.com/NullAITech/zoth-studio-v2)
+[![CodeQL](https://github.com/NullAITech/zoth-studio-v2/actions/workflows/codeql.yml/badge.svg)](https://github.com/NullAITech/zoth-studio-v2/actions/workflows/codeql.yml)
+[![gitleaks](https://github.com/NullAITech/zoth-studio-v2/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/NullAITech/zoth-studio-v2/actions/workflows/gitleaks.yml)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
 [![71 Sovereign Tools](https://img.shields.io/badge/Tools-71%2F71%20Verified%20Registry-blueviolet?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
 [![73/73 Fleet Live](https://img.shields.io/badge/Fleet-73%2F73%20Supervised%20Ports-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
