@@ -48,11 +48,35 @@ const KINEMATIC_MODES = [
       { gesture: 'BLINK_BILATERAL_SYNC', action: 'Keyframe_Natural_Blink_140ms', ring: 'Ring 3' },
     ],
   },
+  {
+    id: 'zela-glasses',
+    label: 'Zela AR Waveguide HUD & Optical Reticle (Smart Glasses)',
+    joints: 32,
+    fpsTarget: 60,
+    bindings: [
+      { gesture: 'TEMPLE_TAP_DOUBLE', action: 'zela-hud --toggle-teleprompter-overlay', ring: 'Ring 2' },
+      { gesture: 'GAZE_FIXATION_1200MS', action: 'zela-ocr --capture-bounding-box-local', ring: 'Ring 2' },
+      { gesture: 'HEAD_NOD_CONFIRM', action: 'zela-ble --ack-notification-frame', ring: 'Ring 1' },
+      { gesture: 'VOICE_WAKE_SOVEREIGN', action: 'whisper-cpp --stream-loopback-8095', ring: 'Ring 0' },
+    ],
+  },
 ];
 
-export default function VisionKinematicsGodModeTool() {
+export default function VisionKinematicsGodModeTool({ tool }) {
   const { activeTheme, cycleReality } = useReality();
-  const [modeId, setModeId] = useState(KINEMATIC_MODES[0].id);
+  const toolId = (tool?.id || '').toLowerCase();
+  const defaultMode = toolId.includes('glasses')
+    ? 'zela-glasses'
+    : toolId.includes('likeness')
+    ? 'face-viseme'
+    : KINEMATIC_MODES[0].id;
+  const [modeId, setModeId] = useState(defaultMode);
+
+  useEffect(() => {
+    if (toolId.includes('glasses')) setModeId('zela-glasses');
+    else if (toolId.includes('likeness')) setModeId('face-viseme');
+    else setModeId('hand-21');
+  }, [toolId]);
   const [pinchThreshold, setPinchThreshold] = useState(0.045);
   const [kalmanSmoothing, setKalmanSmoothing] = useState(0.72);
   const [visemeGain, setVisemeGain] = useState(1.15);
@@ -320,7 +344,7 @@ export default function VisionKinematicsGodModeTool() {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
-            Vision Gesture Control & AI Likeness Viseme Rig
+            {tool?.name || 'Vision Gesture Control, Zela AR HUD & AI Likeness Rig'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
             Move or click inside the 60fps viewport to test 21-joint skeletal hand pinch gestures, 68-point facial gaze/viseme weights, and KWin desktop triggers.

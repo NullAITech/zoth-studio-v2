@@ -112,12 +112,28 @@ const SIGNATURE_DB = [
   },
 ];
 
-export default function AttackSurfaceSentinelGodModeTool() {
+export default function AttackSurfaceSentinelGodModeTool({ tool }) {
   const { activeTheme } = useReality();
-  const [selectedProfileId, setSelectedProfileId] = useState(SURFACE_PROFILES[0].id);
-  const [manifestText, setManifestText] = useState(SURFACE_PROFILES[0].rawManifest);
-  const [activeTab, setActiveTab] = useState(0);
+  const toolId = (tool?.id || '').toLowerCase();
+  const isBountyMode = toolId.includes('bounty');
+  const [selectedProfileId, setSelectedProfileId] = useState(
+    isBountyMode ? SURFACE_PROFILES[1].id : SURFACE_PROFILES[0].id
+  );
+  const [manifestText, setManifestText] = useState(
+    isBountyMode ? SURFACE_PROFILES[1].rawManifest : SURFACE_PROFILES[0].rawManifest
+  );
+  const [activeTab, setActiveTab] = useState(isBountyMode ? 3 : 0);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (toolId.includes('bounty')) {
+      setSelectedProfileId(SURFACE_PROFILES[1].id);
+      setManifestText(SURFACE_PROFILES[1].rawManifest);
+      setActiveTab(3);
+    } else if (toolId.includes('anderson')) {
+      setActiveTab(2);
+    }
+  }, [toolId]);
 
   const canvasRef = useRef(null);
 
@@ -278,6 +294,41 @@ sudo ufw status verbose`;
       2
     );
   }, [activeTheme.id, analysis]);
+
+  const bountyReportMd = useMemo(() => {
+    const topFinding = analysis.exposures[0] || {
+      port: 2375,
+      service: 'Docker Engine TCP Socket',
+      cpe: 'cpe:2.3:a:docker:docker:24.0.5:*:*:*:*:*:*:*',
+      cve: 'CWE-306 / Unauthenticated Root Container Escape',
+      cvss: 9.8,
+      andersonVector: 'Privilege Boundary Collapse — Unauthenticated daemon grants host root via volume mount.',
+      remediation: 'Bind Docker exclusively to unix:///var/run/docker.sock and drop TCP 2375.',
+    };
+    const bountyEst =
+      topFinding.cvss >= 9.0
+        ? '$5,000 – $25,000 USD (CRITICAL P1)'
+        : topFinding.cvss >= 7.0
+        ? '$1,500 – $5,000 USD (HIGH P2)'
+        : '$250 – $1,000 USD (MEDIUM P3)';
+
+    return `# VULNERABILITY DISCLOSURE REPORT — ${topFinding.service}
+- **Severity / CVSS v3.1**: **${topFinding.cvss} (${topFinding.cve})** · Vector: \`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H\`
+- **Estimated Bounty Tier**: **${bountyEst}**
+- **Target CPE**: \`${topFinding.cpe}\` (Port \`${topFinding.port}/tcp\`)
+
+## 1. Executive Summary & Root Cause
+${topFinding.andersonVector}
+
+## 2. Deterministic Proof-of-Concept (Safe Non-Destructive Probe)
+\`\`\`bash
+# Verify exposed service banner & unauthenticated socket state
+nmap -sV -Pn -p ${topFinding.port} <target-host>
+\`\`\`
+
+## 3. Recommended Remediation Patch
+${topFinding.remediation}`;
+  }, [analysis.exposures]);
 
   const handleSelectProfile = (p) => {
     setSelectedProfileId(p.id);
@@ -448,6 +499,7 @@ sudo ufw status verbose`;
               <Tab icon={<SecurityIcon sx={{ fontSize: 15 }} />} iconPosition="start" label={`CPE / CVE Audit (${analysis.exposures.length})`} />
               <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="UFW Lockdown (.sh)" />
               <Tab icon={<ShieldIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Anderson Threat JSON" />
+              <Tab icon={<VerifiedUserIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Bug Bounty PoC (.md)" />
             </Tabs>
           </Box>
 
@@ -561,15 +613,26 @@ sudo ufw status verbose`;
                 <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
                   Structured Threat Model Report (`.json`)
                 </Typography>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={() => handleCopy(andersonThreatModelJson)}
-                  sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary, borderColor: activeTheme.border }}
-                >
-                  {copied ? 'Copied' : 'Copy JSON'}
-                </Button>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={() => handleCopy(andersonThreatModelJson)}
+                    sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary, borderColor: activeTheme.border }}
+                  >
+                    {copied ? 'Copied' : 'Copy JSON'}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => handleDownload(andersonThreatModelJson, 'json')}
+                    sx={{ fontFamily: mono, fontSize: '0.7rem', bgcolor: activeTheme.primary, color: '#05070B', fontWeight: 800 }}
+                  >
+                    Export .json
+                  </Button>
+                </Stack>
               </Stack>
               <Box
                 component="pre"
@@ -586,6 +649,53 @@ sudo ufw status verbose`;
                 }}
               >
                 {andersonThreatModelJson}
+              </Box>
+            </Box>
+          )}
+
+          {activeTab === 3 && (
+            <Box>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
+                  HackerOne / Immunefi Bug Bounty Disclosure Report (`.md`)
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={() => handleCopy(bountyReportMd)}
+                    sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary, borderColor: activeTheme.border }}
+                  >
+                    {copied ? 'Copied' : 'Copy Report'}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => handleDownload(bountyReportMd, 'md')}
+                    sx={{ fontFamily: mono, fontSize: '0.7rem', bgcolor: activeTheme.primary, color: '#05070B', fontWeight: 800 }}
+                  >
+                    Export .md
+                  </Button>
+                </Stack>
+              </Stack>
+              <Box
+                component="pre"
+                sx={{
+                  p: 2,
+                  m: 0,
+                  borderRadius: 1.5,
+                  bgcolor: '#05070B',
+                  border: `1px solid ${activeTheme.border}`,
+                  fontFamily: mono,
+                  fontSize: '0.73rem',
+                  whiteSpace: 'pre-wrap',
+                  overflowX: 'auto',
+                  maxHeight: 330,
+                }}
+              >
+                {bountyReportMd}
               </Box>
             </Box>
           )}

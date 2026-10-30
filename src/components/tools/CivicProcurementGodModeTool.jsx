@@ -9,12 +9,13 @@ import {
   Slider,
   Tabs,
   Tab,
+  TextField,
   Unstable_Grid2 as Grid,
-  LinearProgress,
 } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import GavelIcon from '@mui/icons-material/Gavel';
 import DescriptionIcon from '@mui/icons-material/Description';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -56,16 +57,29 @@ const RFP_OPPORTUNITIES = [
   },
 ];
 
-export default function CivicProcurementGodModeTool() {
+export default function CivicProcurementGodModeTool({ tool }) {
   const { activeTheme } = useReality();
+  const toolId = (tool?.id || '').toLowerCase();
+  const isProductHuntMode = toolId.includes('producthunt') || toolId === 'zoth-ph';
+
   const [selectedRfpId, setSelectedRfpId] = useState(RFP_OPPORTUNITIES[0].id);
   const [engineeringHours, setEngineeringHours] = useState(420);
   const [hourlyRateUsd, setHourlyRateUsd] = useState(165);
   const [infraReserveUsd, setInfraReserveUsd] = useState(8500);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(isProductHuntMode ? 2 : 0);
   const [copied, setCopied] = useState(false);
 
+  // Product Hunt Launch Kit State
+  const [phProductName, setPhProductName] = useState('Zoth Studio v2.1 — Sovereign AI Arsenal');
+  const [phTagline, setPhTagline] = useState('71 zero-egress developer tools & WebGPU workstations in browser');
+  const [phTopics, setPhTopics] = useState('Developer Tools, Artificial Intelligence, Open Source, Privacy');
+  const [phFirst4HrUpvotes, setPhFirst4HrUpvotes] = useState(185);
+
   const canvasRef = useRef(null);
+
+  useEffect(() => {
+    setActiveTab(isProductHuntMode ? 2 : 0);
+  }, [isProductHuntMode]);
 
   const activeRfp = useMemo(
     () => RFP_OPPORTUNITIES.find((r) => r.id === selectedRfpId) || RFP_OPPORTUNITIES[0],
@@ -93,31 +107,107 @@ export default function CivicProcurementGodModeTool() {
     };
   }, [engineeringHours, hourlyRateUsd, infraReserveUsd, activeRfp]);
 
-  // 60fps Civic Procurement Radar & Bid Margin Telemetry Canvas
+  const phMetrics = useMemo(() => {
+    const taglineLen = phTagline.trim().length;
+    const projected24hUpvotes = Math.round(phFirst4HrUpvotes * 3.65);
+    const projectedComments = Math.round(projected24hUpvotes * 0.28);
+    const rankPrediction =
+      projected24hUpvotes >= 650
+        ? '#1 Product of the Day 🏆'
+        : projected24hUpvotes >= 420
+        ? 'Top #3 Product of the Day 🥈'
+        : 'Top #5 Featured Launch 🚀';
+    const taglineScore =
+      taglineLen >= 35 && taglineLen <= 60 ? 96 : taglineLen > 60 ? Math.max(50, 96 - (taglineLen - 60) * 3) : 78;
+
+    const launchKitMd = `# PRODUCT HUNT LAUNCH KIT — ${phProductName}
+- **Tagline (${taglineLen}/60 chars, Score: ${taglineScore}/100)**: \`${phTagline}\`
+- **Topics**: ${phTopics}
+- **24h Velocity Forecast**: **${projected24hUpvotes} Upvotes** / **${projectedComments} Maker Replies** → **${rankPrediction}**
+
+---
+
+## 1. Maker's First Comment (Post at 12:01 AM PST)
+Hey Product Hunt! 👋 I'm Neal Frazier (@1nc0gn30), founder of Neal Frazier Tech & the NullAI Platform.
+
+Today we're thrilled to launch **${phProductName}** — ${phTagline}.
+
+### ⚡ Why We Built It
+Most AI and developer tools trap your data behind cloud paywalls or fake simulation wrappers. Every tool in ${phProductName} executes **100% client-side in your browser** (via WebCrypto, WebGPU WGSL shaders, and WebAssembly) or locally via our zero-egress CLI & MCP servers.
+
+### 🔓 100% Open-Access (Zero Paywalls)
+Every tool, export, and CLI package is completely unlocked by default. If you find it useful, you can support ongoing open-source R&D via our optional ☕ Buy Us a Coffee link.
+
+Would love your feedback on which workstation you try first!`;
+
+    return {
+      taglineLen,
+      taglineScore,
+      projected24hUpvotes,
+      projectedComments,
+      rankPrediction,
+      launchKitMd,
+    };
+  }, [phProductName, phTagline, phTopics, phFirst4HrUpvotes]);
+
+  // 60fps Civic Procurement Radar / Product Hunt Velocity Telemetry Canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
-    let t = 0;
 
     const render = () => {
-      t += 0.025;
       const w = canvas.width;
       const h = canvas.height;
 
       ctx.fillStyle = '#05070B';
       ctx.fillRect(0, 0, w, h);
 
-      // Draw Bid vs Ceiling comparison bars
-      const maxVal = Math.max(bidMath.ceiling, bidMath.totalBid, 1);
-      const barMaxW = w - 240;
+      const barMaxW = w - 260;
 
-      const rows = [
-        { label: 'AGENCY CEILING', val: `$${bidMath.ceiling.toLocaleString()}`, ratio: bidMath.ceiling / maxVal, color: '#64748B' },
-        { label: 'PROPOSED BID', val: `$${bidMath.totalBid.toLocaleString()}`, ratio: bidMath.totalBid / maxVal, color: activeTheme.primary },
-        { label: 'NET SOVEREIGN MARGIN', val: `$${bidMath.netMarginUsd.toLocaleString()} (${bidMath.netMarginPct}%)`, ratio: bidMath.netMarginUsd / maxVal, color: '#10B981' },
-      ];
+      const rows =
+        activeTab === 2
+          ? [
+              {
+                label: 'FIRST 4H UPVOTE SURGE',
+                val: `${phFirst4HrUpvotes} upvotes`,
+                ratio: Math.min(1, phFirst4HrUpvotes / 300),
+                color: '#38BDF8',
+              },
+              {
+                label: '24H PROJECTED TOTAL',
+                val: `${phMetrics.projected24hUpvotes} (${phMetrics.rankPrediction})`,
+                ratio: Math.min(1, phMetrics.projected24hUpvotes / 800),
+                color: activeTheme.primary,
+              },
+              {
+                label: 'TAGLINE SCORE (≤60c)',
+                val: `${phMetrics.taglineScore}/100 (${phMetrics.taglineLen} chars)`,
+                ratio: phMetrics.taglineScore / 100,
+                color: '#10B981',
+              },
+            ]
+          : [
+              {
+                label: 'AGENCY CEILING',
+                val: `$${bidMath.ceiling.toLocaleString()}`,
+                ratio: bidMath.ceiling / Math.max(bidMath.ceiling, bidMath.totalBid, 1),
+                color: '#64748B',
+              },
+              {
+                label: 'PROPOSED BID',
+                val: `$${bidMath.totalBid.toLocaleString()}`,
+                ratio: bidMath.totalBid / Math.max(bidMath.ceiling, bidMath.totalBid, 1),
+                color: activeTheme.primary,
+              },
+              {
+                label: 'NET SOVEREIGN MARGIN',
+                val: `$${bidMath.netMarginUsd.toLocaleString()} (${bidMath.netMarginPct}%)`,
+                ratio: bidMath.netMarginUsd / Math.max(bidMath.ceiling, bidMath.totalBid, 1),
+                color: '#10B981',
+              },
+            ];
 
       rows.forEach((r, idx) => {
         const y = 18 + idx * 24;
@@ -126,13 +216,13 @@ export default function CivicProcurementGodModeTool() {
         ctx.fillText(r.label, 14, y + 11);
 
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
-        ctx.fillRect(155, y, barMaxW, 13);
+        ctx.fillRect(165, y, barMaxW, 13);
 
         ctx.fillStyle = r.color;
-        ctx.fillRect(155, y, Math.max(8, barMaxW * r.ratio), 13);
+        ctx.fillRect(165, y, Math.max(8, barMaxW * r.ratio), 13);
 
         ctx.fillStyle = '#F5F0E8';
-        ctx.fillText(r.val, 165 + barMaxW, y + 11);
+        ctx.fillText(r.val, 175 + barMaxW, y + 11);
       });
 
       animId = requestAnimationFrame(render);
@@ -140,7 +230,7 @@ export default function CivicProcurementGodModeTool() {
 
     animId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animId);
-  }, [activeTheme, bidMath]);
+  }, [activeTheme, bidMath, activeTab, phFirst4HrUpvotes, phMetrics]);
 
   const capabilityStatementMd = useMemo(() => {
     return `# CAPABILITY STATEMENT — NEAL FRAZIER TECH / 757 TECH PRO
@@ -176,7 +266,8 @@ Respectfully submitted,
 Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
   }, [activeRfp]);
 
-  const activeDoc = activeTab === 0 ? capabilityStatementMd : foiaRequestTemplate;
+  const activeDoc =
+    activeTab === 2 ? phMetrics.launchKitMd : activeTab === 0 ? capabilityStatementMd : foiaRequestTemplate;
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
@@ -191,7 +282,10 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${activeRfp.solNumber.toLowerCase()}-${activeTab === 0 ? 'capability-statement' : 'foia-request'}.md`;
+    a.download =
+      activeTab === 2
+        ? 'producthunt-launch-kit.md'
+        : `${activeRfp.solNumber.toLowerCase()}-${activeTab === 0 ? 'capability-statement' : 'foia-request'}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -201,7 +295,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
       elevation={0}
       sx={{
         p: { xs: 2.5, md: 3.5 },
-        mb: 5,
+        mb: 3,
         borderRadius: activeTheme.borderRadius || '12px',
         bgcolor: 'rgba(9, 11, 17, 0.9)',
         border: `1px solid ${activeTheme.border}`,
@@ -219,8 +313,18 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75, flexWrap: 'wrap', useFlexGap: true }}>
             <Chip
-              icon={<AccountBalanceIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />}
-              label="CITY DESK // MUNICIPAL RFP, eVA & FOIA BID WORKSTATION"
+              icon={
+                isProductHuntMode ? (
+                  <RocketLaunchIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />
+                ) : (
+                  <AccountBalanceIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />
+                )
+              }
+              label={
+                isProductHuntMode
+                  ? 'PRODUCT HUNT CONNECTOR // LAUNCH VELOCITY & MAKER KIT'
+                  : 'CITY DESK // MUNICIPAL RFP, eVA & FOIA BID WORKSTATION'
+              }
               size="small"
               sx={{
                 bgcolor: `${activeTheme.primary}18`,
@@ -232,7 +336,11 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
               }}
             />
             <Chip
-              label={`P(WIN): ${bidMath.pWin}% • MARGIN: ${bidMath.netMarginPct}%`}
+              label={
+                activeTab === 2
+                  ? `${phMetrics.rankPrediction} (${phMetrics.projected24hUpvotes} EST. UPVOTES)`
+                  : `P(WIN): ${bidMath.pWin}% • MARGIN: ${bidMath.netMarginPct}%`
+              }
               size="small"
               sx={{
                 bgcolor: 'rgba(16,185,129,0.15)',
@@ -245,37 +353,43 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
-            City Desk Civic Procurement & GovTech Proposal Forge
+            {isProductHuntMode
+              ? 'Product Hunt Launch Command, Tagline Scorer & Maker Kit Forge'
+              : 'City Desk Civic Procurement & GovTech Proposal Forge'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
-            Model Firm-Fixed-Price (FFP) GovTech bids, verify NIST 800-171 / VITA / CMMC compliance, and export Capability Statements & VFOIA requests.
+            {isProductHuntMode
+              ? 'Optimize 60-character taglines, simulate 24h PST upvote velocity, and export your complete Maker Comment & Ship kit.'
+              : 'Model Firm-Fixed-Price (FFP) GovTech bids, verify NIST 800-171 / VITA / CMMC compliance, and export Capability Statements & VFOIA requests.'}
           </Typography>
         </Box>
 
-        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true }}>
-          {RFP_OPPORTUNITIES.map((r) => (
-            <Button
-              key={r.id}
-              size="small"
-              variant={selectedRfpId === r.id ? 'contained' : 'outlined'}
-              onClick={() => setSelectedRfpId(r.id)}
-              sx={{
-                fontFamily: mono,
-                fontSize: '0.69rem',
-                fontWeight: 700,
-                textTransform: 'none',
-                bgcolor: selectedRfpId === r.id ? activeTheme.primary : 'transparent',
-                color: selectedRfpId === r.id ? '#06080D' : activeTheme.primary,
-                borderColor: activeTheme.border,
-              }}
-            >
-              {r.solNumber}
-            </Button>
-          ))}
-        </Stack>
+        {activeTab !== 2 && (
+          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true }}>
+            {RFP_OPPORTUNITIES.map((r) => (
+              <Button
+                key={r.id}
+                size="small"
+                variant={selectedRfpId === r.id ? 'contained' : 'outlined'}
+                onClick={() => setSelectedRfpId(r.id)}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.69rem',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  bgcolor: selectedRfpId === r.id ? activeTheme.primary : 'transparent',
+                  color: selectedRfpId === r.id ? '#06080D' : activeTheme.primary,
+                  borderColor: activeTheme.border,
+                }}
+              >
+                {r.solNumber}
+              </Button>
+            ))}
+          </Stack>
+        )}
       </Stack>
 
-      {/* 60fps Bid vs Ceiling Bar Visualizer */}
+      {/* 60fps Bid vs Ceiling / Upvote Velocity Visualizer */}
       <Box
         sx={{
           mb: 3,
@@ -294,98 +408,142 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
       </Box>
 
       <Grid container spacing={2.5}>
-        {/* Left Column: Solicitation Brief & Pricing Dials */}
+        {/* Left Column: Controls */}
         <Grid xs={12} md={5}>
-          <Stack spacing={2}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                bgcolor: '#06080E',
-                border: `1px solid ${activeTheme.border}`,
-              }}
-            >
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: activeTheme.primary, fontWeight: 800 }}>
-                {activeRfp.solNumber} • {activeRfp.region}
-              </Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 0.5 }}>
-                {activeRfp.title}
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mt: 0.5 }}>
-                NAICS: {activeRfp.naics} • Ceiling: ${activeRfp.ceilingUsd.toLocaleString()}
-              </Typography>
-              <Stack direction="row" spacing={0.75} sx={{ mt: 1.25, flexWrap: 'wrap', useFlexGap: true }}>
-                {activeRfp.complianceRequired.map((c) => (
-                  <Chip
-                    key={c}
-                    label={c}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.64rem',
-                      bgcolor: `${activeTheme.primary}18`,
-                      color: activeTheme.primary,
-                    }}
-                  />
-                ))}
-              </Stack>
-            </Paper>
-
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                bgcolor: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.08)',
-              }}
-            >
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
-                ENGINEERING HOURS ({engineeringHours} hrs)
-              </Typography>
-              <Slider
-                min={80}
-                max={1200}
-                step={20}
-                value={engineeringHours}
-                onChange={(_, v) => setEngineeringHours(v)}
-                sx={{ color: activeTheme.primary, mb: 1.5 }}
+          {activeTab === 2 ? (
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                size="small"
+                label="Product Launch Name"
+                value={phProductName}
+                onChange={(e) => setPhProductName(e.target.value)}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
               />
-
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
-                BLENDED SOVEREIGN RATE ($${hourlyRateUsd}/hr)
-              </Typography>
-              <Slider
-                min={95}
-                max={275}
-                step={5}
-                value={hourlyRateUsd}
-                onChange={(_, v) => setHourlyRateUsd(v)}
-                sx={{ color: activeTheme.primary, mb: 1.5 }}
+              <TextField
+                fullWidth
+                size="small"
+                label={`60-Char Tagline (${phMetrics.taglineLen}/60 chars — Score: ${phMetrics.taglineScore}/100)`}
+                value={phTagline}
+                onChange={(e) => setPhTagline(e.target.value)}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem' } }}
               />
-
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
-                ENCLAVE HARDWARE & SUPPORT RESERVE ($${infraReserveUsd.toLocaleString()})
-              </Typography>
-              <Slider
-                min={1000}
-                max={35000}
-                step={500}
-                value={infraReserveUsd}
-                onChange={(_, v) => setInfraReserveUsd(v)}
-                sx={{ color: activeTheme.primary }}
+              <TextField
+                fullWidth
+                size="small"
+                label="Launch Topics"
+                value={phTopics}
+                onChange={(e) => setPhTopics(e.target.value)}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem' } }}
               />
-            </Paper>
-          </Stack>
+              <Box sx={{ p: 2, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                  FIRST 4-HOUR PST UPVOTE VELOCITY ({phFirst4HrUpvotes} upvotes)
+                </Typography>
+                <Slider
+                  min={40}
+                  max={350}
+                  step={5}
+                  value={phFirst4HrUpvotes}
+                  onChange={(_, v) => setPhFirst4HrUpvotes(v)}
+                  sx={{ color: activeTheme.primary }}
+                />
+              </Box>
+            </Stack>
+          ) : (
+            <Stack spacing={2}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: '#06080E',
+                  border: `1px solid ${activeTheme.border}`,
+                }}
+              >
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: activeTheme.primary, fontWeight: 800 }}>
+                  {activeRfp.solNumber} • {activeRfp.region}
+                </Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 0.5 }}>
+                  {activeRfp.title}
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mt: 0.5 }}>
+                  NAICS: {activeRfp.naics} • Ceiling: ${activeRfp.ceilingUsd.toLocaleString()}
+                </Typography>
+                <Stack direction="row" spacing={0.75} sx={{ mt: 1.25, flexWrap: 'wrap', useFlexGap: true }}>
+                  {activeRfp.complianceRequired.map((c) => (
+                    <Chip
+                      key={c}
+                      label={c}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.64rem',
+                        bgcolor: `${activeTheme.primary}18`,
+                        color: activeTheme.primary,
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </Paper>
+
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: 'rgba(255,255,255,0.02)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                }}
+              >
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                  ENGINEERING HOURS ({engineeringHours} hrs)
+                </Typography>
+                <Slider
+                  min={80}
+                  max={1200}
+                  step={20}
+                  value={engineeringHours}
+                  onChange={(_, v) => setEngineeringHours(v)}
+                  sx={{ color: activeTheme.primary, mb: 1.5 }}
+                />
+
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                  BLENDED SOVEREIGN RATE ($${hourlyRateUsd}/hr)
+                </Typography>
+                <Slider
+                  min={95}
+                  max={275}
+                  step={5}
+                  value={hourlyRateUsd}
+                  onChange={(_, v) => setHourlyRateUsd(v)}
+                  sx={{ color: activeTheme.primary, mb: 1.5 }}
+                />
+
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                  ENCLAVE HARDWARE & SUPPORT RESERVE ($${infraReserveUsd.toLocaleString()})
+                </Typography>
+                <Slider
+                  min={1000}
+                  max={35000}
+                  step={500}
+                  value={infraReserveUsd}
+                  onChange={(_, v) => setInfraReserveUsd(v)}
+                  sx={{ color: activeTheme.primary }}
+                />
+              </Paper>
+            </Stack>
+          )}
         </Grid>
 
-        {/* Right Column: Capability Statement & VFOIA Request Generator */}
+        {/* Right Column: Deliverable Output Generator */}
         <Grid xs={12} md={7}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
               sx={{
                 minHeight: 38,
                 '& .MuiTab-root': {
@@ -399,12 +557,15 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
             >
               <Tab icon={<DescriptionIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Capability Statement (.md)" />
               <Tab icon={<GavelIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="VFOIA Records Request" />
+              <Tab icon={<RocketLaunchIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Product Hunt Launch Kit" />
             </Tabs>
           </Box>
 
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
-              FFP Bid: ${bidMath.totalBid.toLocaleString()} • Net Margin: ${bidMath.netMarginUsd.toLocaleString()} ({bidMath.netMarginPct}%)
+              {activeTab === 2
+                ? `Forecast: ${phMetrics.projected24hUpvotes} Upvotes · ${phMetrics.rankPrediction}`
+                : `FFP Bid: $${bidMath.totalBid.toLocaleString()} • Net Margin: $${bidMath.netMarginUsd.toLocaleString()} (${bidMath.netMarginPct}%)`}
             </Typography>
             <Stack direction="row" spacing={1}>
               <Button

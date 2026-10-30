@@ -85,6 +85,7 @@ import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceS
 import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
+import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -830,18 +831,11 @@ export default function RealToolWorkspacePage() {
         </Paper>
       </HeroReveal>
 
-      {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage */}
-      <Box sx={{ mb: 4 }}>
-        <ToolMotionShowcase
-          tool={tool}
-          onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-        />
-      </Box>
-
-      {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine and no dedicated Enclave component) */}
+      {/* Interactive In-Browser Workstation — Placed ABOVE THE FOLD immediately after the Hero Header */}
       {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (
-        <Box id="client-workstation-deck">
+        <Box id="client-workstation-deck" sx={{ mb: 4 }}>
           <WebGPUToolWorkstation tool={tool} />
+          <SovereignToolOutputWorkbench tool={tool} />
         </Box>
       )}
 
@@ -975,8 +969,17 @@ export default function RealToolWorkspacePage() {
             </Stack>
           </Box>
           <EnclaveToolComponent tool={tool} />
+          <SovereignToolOutputWorkbench tool={tool} />
         </Paper>
       )}
+
+      {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage (Moved below the Interactive Workstation so the tool is Above-the-Fold) */}
+      <Box sx={{ mb: 5 }}>
+        <ToolMotionShowcase
+          tool={tool}
+          onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+        />
+      </Box>
 
       {/* SECTION 1: Why Use This Tool & Problem Solved */}
       <Box sx={{ mb: 6 }}>
