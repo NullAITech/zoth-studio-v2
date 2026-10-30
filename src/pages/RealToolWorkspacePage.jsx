@@ -30,6 +30,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SpeedIcon from '@mui/icons-material/Speed';
 
 import { microTools } from '../data/toolsData';
+import { workstations } from '../data/workstations';
 import ToolOfferLine from '../components/ToolOfferLine';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -192,6 +193,41 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'city-desk': CivicProcurementGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
+
+  // Studio Cockpit & Workstation IDs (from workstations.js)
+  'cockpit': SwarmCivilizationGodModeTool,
+  'ide': ZothBoltGodModeTool,
+  'agent-composer': AzothArchonGodModeTool,
+  'mission-control': SwarmCivilizationGodModeTool,
+  'models': PromptMasterGodModeTool,
+  'ax-powerhouse': WebMcpInspectorGodModeTool,
+  'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
+  'chronicle': AdytumPlannerGodModeTool,
+  'notes-reviewer': NeuroMemoryGodModeTool,
+  'brand': RealityShaderForgeGodModeTool,
+  'vision-link': VisionKinematicsGodModeTool,
+  'web3-hub': SovereignBridgeGodModeTool,
+  'github-tool': PolyglotStudioGodModeTool,
+  'edge-forge': AgentCapsuleJailGodModeTool,
+  'netlify-ax': AeoGraphEngineGodModeTool,
+  'webgen': ZothFoundryGodModeTool,
+  'omnipost': OmniPostSocialGodModeTool,
+  'subsweep': SubSweepGodModeTool,
+  'connectors': McpLensGodModeTool,
+  'hexstrike': HexStrikeGodModeTool,
+  'netrunner-memory': NeuroMemoryGodModeTool,
+  'consensus': SovereignBridgeGodModeTool,
+  'bus-monitor': SovereignBridgeGodModeTool,
+  'math-pillars': VectorSearchGodModeTool,
+};
+
+const WORKSTATION_TOOL_ALIASES = {
+  'webgen': 'zoth-webgen',
+  'omnipost': 'omnipost-social-engine',
+  'subsweep': 'subsweep-lead-scanner',
+  'hexstrike': 'hexstrike-arsenal',
+  'netrunner-memory': 'neuro-memory-daemon',
+  'bus-monitor': 'sovereign-agent-bridge',
 };
 
 export default function RealToolWorkspacePage() {
@@ -205,20 +241,102 @@ export default function RealToolWorkspacePage() {
   const [unlockedPreview, setUnlockedPreview] = useState(false);
 
   const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
-  const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);
+  const resolvedToolId = WORKSTATION_TOOL_ALIASES[toolId] || toolId;
+  const catalogTool = microTools.find((t) => t.id === resolvedToolId || t.repo === resolvedToolId || t.id === toolId);
+  const wsEntry = !catalogTool ? workstations.find((w) => w.id === toolId) : null;
+  const tool = catalogTool || (wsEntry ? {
+    id: wsEntry.id,
+    name: wsEntry.name,
+    repo: wsEntry.id,
+    category: wsEntry.band || 'Swarm & Core',
+    executionType: 'browser',
+    github: 'https://github.com/NullAITech/zoth-studio-v2',
+    liveUrl: `https://zoth.nullai.tech/tools/${wsEntry.id}`,
+    description: wsEntry.description || 'Zero-egress sovereign workstation integrated into Zoth Studio v2.',
+    version: '2.1.0',
+    pull: wsEntry.pullCommand || 'npx @nullaitech/zoth studio',
+  } : null);
   const docs = getToolDocumentation(tool);
   const execEval = evaluateTool(tool);
   const canRunClientSide = execEval.canExecute;
-  const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id];
+  const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id] || ENCLAVE_TOOL_COMPONENTS[toolId];
   // Tools with dedicated 60fps in-browser God-Mode workstations or WebGPU/WASM engines are immediately interactive!
   const isLocked = !isLocal && !canRunClientSide && !unlockedPreview && !EnclaveToolComponent;
-  const { reality } = useReality();
+  const { reality, params: realityParams } = useReality();
+  const [copiedTuiSpec, setCopiedTuiSpec] = useState(false);
 
   const gold = {
     accent: isDark ? reality.accent : reality.accentLightMode,
     soft: isDark ? reality.accentSoft : reality.accentLightMode,
     wash: isDark ? reality.accentWash : '#FEF9E7',
     border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.3)',
+  };
+
+  const brailleSignature = React.useMemo(() => {
+    const seedStr = tool?.id || toolId || 'zoth';
+    const densityBoost = (realityParams?.density || 50) / 100;
+    const chars = [];
+    for (let i = 0; i < 16; i++) {
+      const code = seedStr.charCodeAt(i % seedStr.length) + i * 17;
+      const mask = Math.min(255, Math.max(1, Math.round(((code % 255) * (0.65 + densityBoost * 0.55)) % 256)));
+      chars.push(String.fromCharCode(0x2800 + mask));
+    }
+    return chars.join('');
+  }, [tool?.id, toolId, realityParams?.density]);
+
+  const handleCopyBrailleSpec = () => {
+    if (!tool) return;
+    const spec = [
+      `┌── UNCOMMON WEB × ZOTH STUDIO TELEMETRY ──────────────────────────┐`,
+      `│ TOOL    : ${tool.name} (${tool.id})`,
+      `│ ENGINE  : ${tool.executionType?.toUpperCase() || 'BROWSER'} · ZERO-EGRESS`,
+      `│ BRAILLE : ${brailleSignature} (U+2800 2x4 Sub-Pixel Matrix)`,
+      `│ BAYER   : ░▒▓█ ${reality?.name || 'Aurum Sovereign'} · Density ${realityParams?.density || 50}%`,
+      `│ PULL    : ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
+      `└──────────────────────────────────────────────────────────────────┘`,
+    ].join('\n');
+    navigator.clipboard?.writeText(spec);
+    setCopiedTuiSpec(true);
+    setTimeout(() => setCopiedTuiSpec(false), 1800);
+  };
+
+  const handleExportUncommonSvg = () => {
+    if (!tool) return;
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const lines = [
+      `UNCOMMON WEB (webdev.teknium.io) x ZOTH STUDIO TELEMETRY CARD`,
+      `--------------------------------------------------------------------`,
+      `TOOL ID     : ${tool.id}  [v${tool.version || '2.1.0'}]`,
+      `NAME        : ${tool.name}`,
+      `CATEGORY    : ${tool.category || 'Sovereign Arsenal'}`,
+      `EXECUTION   : ${tool.executionType === 'local_cli' ? 'LOCAL CLI + IN-BROWSER WORKBENCH' : '100% CLIENT-SIDE IN-BROWSER ENGINE'}`,
+      `BRAILLE SIG : ${brailleSignature}  (Unicode U+2800 2x4 Sub-Pixel)`,
+      `BAYER 4x4   : ░▒▓█▓▒░  REALITY=${reality?.id || 'aurum'} DENSITY=${realityParams?.density || 50}%`,
+      `CLI / PULL  : ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
+      `--------------------------------------------------------------------`,
+      `Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform`,
+    ];
+    const fontSize = 13;
+    const lineHeight = 20;
+    const width = 680;
+    const height = lines.length * lineHeight + 44;
+    const tspanNodes = lines
+      .map(
+        (line, i) =>
+          `<text x="22" y="${30 + i * lineHeight}" fill="${i === 0 || i === 6 ? '#D4AF37' : '#EDEFF2'}" font-family="JetBrains Mono, monospace" font-size="${fontSize}px" xml:space="preserve">${esc(line)}</text>`
+      )
+      .join('\n  ');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <rect width="100%" height="100%" rx="12" fill="#08080C" stroke="#D4AF37" stroke-width="1.5"/>
+  ${tspanNodes}
+</svg>`;
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${tool.id}-uncommon-braille-card.svg`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleCopy = (text, setCopiedFn) => {
@@ -743,7 +861,7 @@ export default function RealToolWorkspacePage() {
               : '0 4px 20px rgba(212,175,55,0.12)',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: gold.accent, display: 'flex' }}>
                 <TerminalIcon sx={{ fontSize: 24 }} />
@@ -752,24 +870,109 @@ export default function RealToolWorkspacePage() {
                 <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
                   Interactive Enclave Workstation
                 </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: isLocal ? '#34D399' : gold.soft, fontWeight: 700 }}>
-                  {isLocal ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE' : 'SIMULATION MODE (NO LIVE BACKEND)'}
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isLocal || tool.executionType !== 'local_cli' ? '#34D399' : gold.soft, fontWeight: 700 }}>
+                  {isLocal
+                    ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE'
+                    : tool.executionType !== 'local_cli'
+                    ? '100% CLIENT-SIDE ENGINE · ZERO-EGRESS IN-BROWSER EXECUTION'
+                    : 'INTERACTIVE IN-BROWSER WORKBENCH · CLI & MCP PARITY'}
                 </Typography>
               </Box>
             </Box>
-            <Chip
-              icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: isLocal ? '#10B981' : gold.accent }} />}
-              label={isLocal ? 'LIVE LOCAL EXECUTION' : 'ENCLAVE SIMULATION HARNESS'}
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                bgcolor: isLocal ? (isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5') : gold.wash,
-                color: isLocal ? (isDark ? '#34D399' : '#047857') : gold.soft,
-                border: `1px solid ${isLocal ? 'rgba(16,185,129,0.3)' : gold.border}`,
-              }}
-            />
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Chip
+                icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: isLocal || tool.executionType !== 'local_cli' ? '#10B981' : gold.accent }} />}
+                label={
+                  isLocal
+                    ? 'LIVE LOCAL EXECUTION'
+                    : tool.executionType !== 'local_cli'
+                    ? 'LIVE IN-BROWSER ENGINE'
+                    : 'INTERACTIVE WORKBENCH'
+                }
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.68rem',
+                  bgcolor: isLocal || tool.executionType !== 'local_cli' ? (isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5') : gold.wash,
+                  color: isLocal || tool.executionType !== 'local_cli' ? (isDark ? '#34D399' : '#047857') : gold.soft,
+                  border: `1px solid ${isLocal || tool.executionType !== 'local_cli' ? 'rgba(16,185,129,0.3)' : gold.border}`,
+                }}
+              />
+            </Stack>
+          </Box>
+
+          {/* Uncommon Web (webdev.teknium.io) × Zoth Studio Sub-Pixel Braille & Vector Export Bar */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 1.5,
+              px: 2,
+              py: 1.1,
+              mb: 3,
+              borderRadius: 2,
+              bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FAF7F0',
+              border: `1px solid ${gold.border}`,
+              backgroundImage: isDark
+                ? 'radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 0)'
+                : 'radial-gradient(rgba(184, 134, 11, 0.10) 1px, transparent 0)',
+              backgroundSize: '8px 8px',
+            }}
+          >
+            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+              <Chip
+                label={`⣿ U+2800 ${brailleSignature}`}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.7rem',
+                  bgcolor: isDark ? '#08080C' : '#FFFFFF',
+                  color: gold.accent,
+                  border: `1px solid ${gold.border}`,
+                }}
+              />
+              <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', fontWeight: 700 }}>
+                ░▒▓█ BAYER 8×8 DITHER · REALITY: {(reality?.name || 'AURUM').toUpperCase()} ({realityParams?.density || 50}% DENSITY)
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<ContentCopyIcon sx={{ fontSize: 13 }} />}
+                onClick={handleCopyBrailleSpec}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.68rem',
+                  py: 0.25,
+                  textTransform: 'none',
+                  color: theme.palette.text.primary,
+                  borderColor: gold.border,
+                }}
+              >
+                {copiedTuiSpec ? 'Copied TUI Spec' : 'Copy TUI Braille Spec'}
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<CodeIcon sx={{ fontSize: 14 }} />}
+                onClick={handleExportUncommonSvg}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.68rem',
+                  py: 0.25,
+                  textTransform: 'none',
+                  color: gold.accent,
+                  borderColor: gold.border,
+                }}
+              >
+                Export Vector .SVG Card
+              </Button>
+            </Stack>
           </Box>
           <EnclaveToolComponent tool={tool} />
         </Paper>

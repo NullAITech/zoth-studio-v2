@@ -15,7 +15,7 @@ import { useTheme } from '@mui/material/styles';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import BoltIcon from '@mui/icons-material/Bolt';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -42,7 +42,7 @@ const INITIAL_MEMORIES = [
   {
     id: 'mem-03',
     tier: 'Episodic Trace',
-    content: 'Verified studio contact invariant: Neal Frazier (Neal Frazier Tech) • (555) 555-0199 • neal@nealfrazier.tech.',
+    content: 'Verified studio contact invariant: Neal Frazier (Neal Frazier Tech) • NullAI Platform • neal@nealfrazier.tech.',
     tags: ['identity', 'contact', 'invariant', 'nealfrazier'],
     salience: 0.99,
     ageHours: 0.5,
@@ -294,6 +294,15 @@ export default function NeuroMemoryGodModeTool() {
             Hybrid Vector + BM25 + <span style={{ color: '#C084FC' }}>Ebbinghaus STDP</span> Recall Engine
           </Typography>
         </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<ContentCopyIcon />}
+          onClick={() => navigator.clipboard?.writeText(JSON.stringify(rankedMemories, null, 2))}
+          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#C084FC', borderColor: 'rgba(192,132,252,0.4)' }}
+        >
+          Export Ranked Engrams JSON
+        </Button>
       </Stack>
 
       <Grid container spacing={3}>

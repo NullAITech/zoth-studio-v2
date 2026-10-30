@@ -11,28 +11,174 @@ import {
   FormControl,
   InputLabel,
   LinearProgress,
+  Stack,
 } from '@mui/material';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DownloadIcon from '@mui/icons-material/Download';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import BoltIcon from '@mui/icons-material/Bolt';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", monospace';
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+
+const BUILTIN_TEMPLATES = [
+  { id: 'hermes-sprig', name: 'Sprig Organic Drops (Uncommon Web Braille Hero)' },
+  { id: 'zoth-enclave', name: 'Sovereign AI Enclave (Dark Gold + Bayer Dither)' },
+  { id: 'protocol-docs', name: 'Zero-Egress Protocol Spec (TUI / Monospace)' },
+  { id: 'ivory-atelier', name: 'Editorial Alabaster Atelier (Light Mode Alchemist)' },
+];
+
+function buildClientSideHtml({ idea, templateId, accent }) {
+  const safeTitle = (idea || 'Sovereign Web Launch').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const isLight = templateId === 'ivory-atelier';
+  const bg = isLight ? '#FAF7F0' : '#08080C';
+  const fg = isLight ? '#141413' : '#EDEFF2';
+  const cardBg = isLight ? '#FFFFFF' : '#10121A';
+  const border = isLight ? 'rgba(184,134,11,0.28)' : 'rgba(212,175,55,0.28)';
+  const brailleStrip = '⠁⠃⠇⠏⠟⠿⡿⣿⢿⣻জিৎ :: ░▒▓█ UNCOMMON-WEB × ZOTH-FOUNDRY █▓▒░ :: ⣿⡿⠿⠟⠏⠇⠃⠁';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${safeTitle}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: ${bg};
+      color: ${fg};
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 28px;
+      line-height: 1.55;
+    }
+    .braille-bar {
+      font-family: ui-monospace, "JetBrains Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: ${accent};
+      padding: 8px 12px;
+      border: 1px solid ${border};
+      border-radius: 8px;
+      background: ${cardBg};
+      margin-bottom: 24px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .hero {
+      padding: 32px;
+      border-radius: 16px;
+      background: ${cardBg};
+      border: 1px solid ${border};
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+    }
+    .badge {
+      display: inline-block;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 800;
+      color: ${accent};
+      border: 1px solid ${accent};
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    p.lead {
+      opacity: 0.82;
+      max-width: 620px;
+      margin-bottom: 22px;
+    }
+    .cta {
+      display: inline-block;
+      background: ${accent};
+      color: #08080B;
+      font-family: ui-monospace, monospace;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 11px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .card {
+      padding: 16px;
+      border-radius: 12px;
+      background: ${cardBg};
+      border: 1px solid ${border};
+    }
+    .card h3 {
+      font-size: 14px;
+      color: ${accent};
+      margin-bottom: 6px;
+      font-family: ui-monospace, monospace;
+    }
+    .card p {
+      font-size: 13px;
+      opacity: 0.78;
+    }
+  </style>
+</head>
+<body>
+  <div class="braille-bar">${brailleStrip}</div>
+  <section class="hero">
+    <span class="badge">TEMPLATE: ${(templateId || 'auto-matched').toUpperCase()} · ZERO-EGRESS BUILD</span>
+    <h1>${safeTitle}</h1>
+    <p class="lead">Synthesized in-browser with Uncommon Web Unicode Braille telemetry, Ordered Bayer dither surfaces, and responsive Bento architecture.</p>
+    <a class="cta" href="#launch">Launch Interactive Experience →</a>
+    <div class="grid">
+      <div class="card">
+        <h3>01 // SUB-PIXEL BRAILLE</h3>
+        <p>Unicode U+2800 2×4 density matrix calibrated for 60fps telemetry headers.</p>
+      </div>
+      <div class="card">
+        <h3>02 // AEO SCHEMA GRAPH</h3>
+        <p>Pre-wired JSON-LD SoftwareApplication + FAQPage graph for instant citation.</p>
+      </div>
+      <div class="card">
+        <h3>03 // EDGE DEPLOY READY</h3>
+        <p>Single-file zero-dependency bundle ready for Netlify or local daemon :8092.</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>`;
+}
 
 export default function ZothFoundryGodModeTool() {
   const [idea, setIdea] = useState('Sprig Neighborhood Pantry — 15-Minute Organic Drops');
   const [templateId, setTemplateId] = useState('hermes-sprig');
-  const [accent, setAccent] = useState('#22C55E');
-  const [templates, setTemplates] = useState([]);
+  const [accent, setAccent] = useState('#D4AF37');
+  const [templates, setTemplates] = useState(BUILTIN_TEMPLATES);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [result, setResult] = useState(() => ({
+    mode: 'client-synth',
+    html: buildClientSideHtml({
+      idea: 'Sprig Neighborhood Pantry — 15-Minute Organic Drops',
+      templateId: 'hermes-sprig',
+      accent: '#D4AF37',
+    }),
+  }));
 
   useEffect(() => {
     fetch('/api/studio/webgen/templates')
       .then((r) => r.json())
       .then((d) => {
-        if (Array.isArray(d?.templates)) setTemplates(d.templates);
+        if (Array.isArray(d?.templates) && d.templates.length > 0) {
+          setTemplates(d.templates);
+        }
       })
       .catch(() => {});
     runQuickBuild(false);
@@ -41,6 +187,7 @@ export default function ZothFoundryGodModeTool() {
 
   async function runQuickBuild(deployNow = false) {
     setLoading(true);
+    const fallbackHtml = buildClientSideHtml({ idea, templateId, accent });
     try {
       const res = await fetch('/api/studio/webgen/oneshot', {
         method: 'POST',
@@ -53,13 +200,41 @@ export default function ZothFoundryGodModeTool() {
           deploy: Boolean(deployNow),
         }),
       });
-      const data = await res.json();
-      setResult(data);
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.html) {
+          setResult({ ...data, mode: 'daemon-8092' });
+          setLoading(false);
+          return;
+        }
+      }
     } catch (_) {
-    } finally {
-      setLoading(false);
+      // Fall back to deterministic in-browser synthesis when daemon :8092 is offline
     }
+    setResult({
+      mode: 'client-synth',
+      html: fallbackHtml,
+    });
+    setLoading(false);
   }
+
+  const handleCopyHtml = () => {
+    if (!result?.html) return;
+    navigator.clipboard?.writeText(result.html);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
+  const handleDownloadHtml = () => {
+    if (!result?.html) return;
+    const blob = new Blob([result.html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(templateId || 'zoth-quicksite').toLowerCase()}-starter.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <Paper
@@ -74,16 +249,41 @@ export default function ZothFoundryGodModeTool() {
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
         <Box>
-          <Chip
-            label="SIMPLE 3-STEP STATIC LAUNCHER (:8092)"
-            size="small"
-            sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: '#D4AF37', mb: 0.5 }}
-          />
-          <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5E6AB' }}>
-            Zoth QuickSite Starter
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: 'wrap' }}>
+            <Chip
+              label="SIMPLE 3-STEP STATIC LAUNCHER (:8092 + CLIENT ENGINE)"
+              size="small"
+              sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: '#D4AF37' }}
+            />
+            <Chip
+              label="⣿ U+2800 BRAILLE HERO READY"
+              size="small"
+              sx={{ fontFamily: mono, fontSize: '0.64rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
+            />
+          </Stack>
+          <Typography variant="h6" sx={{ fontFamily: display, fontWeight: 400, color: '#F5E6AB' }}>
+            Zoth QuickSite Starter Foundry
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={handleCopyHtml}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: 'rgba(212,175,55,0.4)', color: '#F5E6AB', textTransform: 'none' }}
+          >
+            {copied ? 'Copied HTML' : 'Copy HTML'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadHtml}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: 'rgba(56,189,248,0.4)', color: '#38BDF8', textTransform: 'none' }}
+          >
+            Download .HTML
+          </Button>
           <Button
             size="small"
             variant="contained"
@@ -91,7 +291,7 @@ export default function ZothFoundryGodModeTool() {
             startIcon={<BoltIcon />}
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.72rem', textTransform: 'none' }}
           >
-            Switch to Zoth Bolt (Main AI & Motion Architect)
+            Switch to Zoth Bolt
           </Button>
           <Button
             size="small"
@@ -142,6 +342,7 @@ export default function ZothFoundryGodModeTool() {
               onChange={(e) => setAccent(e.target.value)}
               style={{ width: 44, height: 32, border: 'none', background: 'transparent', cursor: 'pointer' }}
             />
+            <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#D4AF37' }}>{accent}</Typography>
           </Box>
 
           <Button
@@ -151,7 +352,7 @@ export default function ZothFoundryGodModeTool() {
             onClick={() => runQuickBuild(false)}
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.75rem', textTransform: 'none' }}
           >
-            Preview Starter Page
+            Synthesize Live Starter Page
           </Button>
 
           <Button
@@ -178,30 +379,14 @@ export default function ZothFoundryGodModeTool() {
               </a>
             </Box>
           )}
-
-          {result?.outputDir && (
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={<DownloadIcon />}
-              href={`http://127.0.0.1:8092/api/download-zip?dir=${encodeURIComponent(result.outputDir)}`}
-              sx={{ fontFamily: mono, fontSize: '0.7rem', borderColor: 'rgba(255,255,255,0.2)', color: '#CBD5E1', textTransform: 'none' }}
-            >
-              Download .ZIP
-            </Button>
-          )}
         </Box>
 
         <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.25)', minHeight: 460, bgcolor: '#05060A' }}>
-          {result?.html ? (
-            <iframe
-              title="QuickSite Starter Preview"
-              srcDoc={result.html}
-              style={{ width: '100%', height: 460, border: 'none', background: '#08080B' }}
-            />
-          ) : (
-            <Box sx={{ p: 4, color: '#64748B', fontFamily: mono, fontSize: '0.8rem' }}>Loading preview...</Box>
-          )}
+          <iframe
+            title="QuickSite Starter Preview"
+            srcDoc={result?.html || buildClientSideHtml({ idea, templateId, accent })}
+            style={{ width: '100%', height: 460, border: 'none', background: '#08080B' }}
+          />
         </Box>
       </Box>
     </Paper>

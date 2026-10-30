@@ -19,9 +19,12 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import DownloadIcon from '@mui/icons-material/Download';
+import { useReality } from '../../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+const BRAILLE_RAMP = ['⠀', '⡀', '⡄', '⡆', '⡇', '⣇', '⣧', '⣷', '⣿'];
 
 const PROVIDERS = [
   {
@@ -56,26 +59,36 @@ const PROVIDERS = [
 export default function PodCommerceGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const { reality } = useReality();
 
-  const [retailPrice, setRetailPrice] = useState(38);
-  const [quantity, setQuantity] = useState(2);
-  const [channel, setChannel] = useState('shopify');
+  const [retailPrice, setRetailPrice] = useState(25);
+  const [shippingCharged, setShippingCharged] = useState(5);
+  const [quantity, setQuantity] = useState(1);
+  const [channel, setChannel] = useState('etsy');
+  const [printifyPremium, setPrintifyPremium] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const canvasRef = useRef(null);
 
-  const channelFeePct = channel === 'shopify' ? 0.029 : 0.095; // Shopify 2.9% vs Etsy 6.5%+3%
-
   const quotes = useMemo(() => {
-    const grossRev = retailPrice * quantity;
-    const platformFee = grossRev * channelFeePct + 0.3;
+    const grossRev = (retailPrice + shippingCharged) * quantity;
+    const platformFee =
+      channel === 'shopify'
+        ? grossRev * 0.029 + 0.3
+        : grossRev * 0.065 + grossRev * 0.03 + 0.25 + 0.2 * quantity;
 
     return PROVIDERS.map((p) => {
-      const fulfillment = p.baseCost * quantity + p.shipCost + (quantity - 1) * 1.5;
-      const netProfit = grossRev - platformFee - fulfillment;
+      const unitPodCost =
+        p.id === 'printify-choice' && printifyPremium ? p.baseCost * 0.8 : p.baseCost;
+      const outboundShippingCost = p.shipCost + (quantity - 1) * 1.5;
+      const fulfillment = unitPodCost * quantity + outboundShippingCost;
+      const totalCosts = fulfillment + platformFee;
+      const netProfit = grossRev - totalCosts;
       const marginPct = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
       return {
         ...p,
+        unitPodCost: Number(unitPodCost.toFixed(2)),
+        outboundShippingCost: Number(outboundShippingCost.toFixed(2)),
         grossRev: Number(grossRev.toFixed(2)),
         platformFee: Number(platformFee.toFixed(2)),
         fulfillment: Number(fulfillment.toFixed(2)),
@@ -83,9 +96,20 @@ export default function PodCommerceGodModeTool() {
         marginPct: Number(marginPct.toFixed(1)),
       };
     }).sort((a, b) => b.netProfit - a.netProfit);
-  }, [retailPrice, quantity, channelFeePct]);
+  }, [retailPrice, shippingCharged, quantity, channel, printifyPremium]);
 
   const winner = quotes[0];
+
+  const brailleCurve = useMemo(() => {
+    return Array.from({ length: 24 }, (_, i) => {
+      const p = 15 + i * 3;
+      const rev = (p + shippingCharged) * quantity;
+      const fee = channel === 'shopify' ? rev * 0.029 + 0.3 : rev * 0.095 + 0.25 + 0.2 * quantity;
+      const net = rev - fee - winner.fulfillment;
+      const m = Math.max(0, Math.min(1, (net / Math.max(1, rev)) / 0.75));
+      return BRAILLE_RAMP[Math.round(m * (BRAILLE_RAMP.length - 1))];
+    }).join('');
+  }, [shippingCharged, quantity, channel, winner.fulfillment]);
 
   const dispatchPayload = useMemo(
     () =>
@@ -95,23 +119,22 @@ export default function PodCommerceGodModeTool() {
           selected_provider: winner.id,
           channel,
           quantity,
+          printify_premium_20pct: printifyPremium,
           margin_telemetry: {
             gross_revenue_usd: winner.grossRev,
+            pod_unit_cost_usd: winner.unitPodCost,
+            outbound_shipping_cost_usd: winner.outboundShippingCost,
             fulfillment_cost_usd: winner.fulfillment,
             platform_fee_usd: winner.platformFee,
             net_profit_usd: winner.netProfit,
             net_margin_pct: `${winner.marginPct}%`,
           },
-          dispatch_contact: {
-            operator: 'Neal Frazier Tech',
-            phone: '+1-555-555-0199',
-            email: 'neal@nealfrazier.tech',
-          },
+          operator: 'Neal Frazier Tech (@1nc0gn30)',
         },
         null,
         2
       ),
-    [winner, channel, quantity]
+    [winner, channel, quantity, printifyPremium]
   );
 
   useEffect(() => {
@@ -194,6 +217,18 @@ export default function PodCommerceGodModeTool() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadJson = () => {
+    const blob = new Blob([dispatchPayload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pod-dispatch-${winner.id}-${channel}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const accent = reality?.accent || '#D4AF37';
+
   return (
     <Paper
       elevation={0}
@@ -206,7 +241,7 @@ export default function PodCommerceGodModeTool() {
         boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
       }}
     >
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
         <Chip
           icon={<LocalShippingIcon sx={{ fontSize: '0.95rem !important', color: '#34D399 !important' }} />}
           label="POD COMMERCE & MARGIN SENTINEL · SMART ROUTER"
@@ -221,7 +256,7 @@ export default function PodCommerceGodModeTool() {
           }}
         />
         <Chip
-          icon={<TrendingUpIcon sx={{ fontSize: '0.9rem !important', color: '#D4AF37 !important' }} />}
+          icon={<TrendingUpIcon sx={{ fontSize: '0.9rem !important', color: `${accent} !important` }} />}
           label={`OPTIMAL NET MARGIN: ${winner.marginPct}% ($${winner.netProfit})`}
           size="small"
           sx={{
@@ -229,7 +264,19 @@ export default function PodCommerceGodModeTool() {
             fontWeight: 800,
             fontSize: '0.68rem',
             bgcolor: 'rgba(212,175,55,0.14)',
-            color: '#F5E6AB',
+            color: isDark ? '#F5E6AB' : '#92400E',
+          }}
+        />
+        <Chip
+          label={`BRAILLE MARGIN CURVE: ${brailleCurve}`}
+          size="small"
+          sx={{
+            fontFamily: mono,
+            fontWeight: 700,
+            fontSize: '0.68rem',
+            bgcolor: isDark ? 'rgba(56,189,248,0.1)' : '#F0F9FF',
+            color: isDark ? '#38BDF8' : '#0369A1',
+            border: '1px solid rgba(56,189,248,0.3)',
           }}
         />
       </Stack>
@@ -239,7 +286,7 @@ export default function PodCommerceGodModeTool() {
 
       <Grid container spacing={3}>
         <Grid xs={12} md={5}>
-          <Stack spacing={2.25}>
+          <Stack spacing={2}>
             <FormControl fullWidth size="small">
               <InputLabel sx={{ fontFamily: mono, fontSize: '0.78rem' }}>Storefront Channel</InputLabel>
               <Select
@@ -248,11 +295,11 @@ export default function PodCommerceGodModeTool() {
                 onChange={(e) => setChannel(e.target.value)}
                 sx={{ fontFamily: mono, fontSize: '0.8rem' }}
               >
+                <MenuItem value="etsy" sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
+                  Etsy Marketplace (6.5% Tx + 3%+$0.25 Proc + $0.20 Listing)
+                </MenuItem>
                 <MenuItem value="shopify" sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
                   Shopify Direct (2.9% + $0.30 Stripe)
-                </MenuItem>
-                <MenuItem value="etsy" sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
-                  Etsy Marketplace (6.5% Tx + 3% Payment)
                 </MenuItem>
               </Select>
             </FormControl>
@@ -261,7 +308,14 @@ export default function PodCommerceGodModeTool() {
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem' }}>
                 Unit Retail Price: ${retailPrice} USD
               </Typography>
-              <Slider min={18} max={95} step={1} value={retailPrice} onChange={(_, v) => setRetailPrice(v)} sx={{ color: '#34D399' }} />
+              <Slider min={15} max={95} step={1} value={retailPrice} onChange={(_, v) => setRetailPrice(v)} sx={{ color: '#34D399' }} />
+            </Box>
+
+            <Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem' }}>
+                Shipping Charged to Buyer: ${shippingCharged} USD
+              </Typography>
+              <Slider min={0} max={20} step={1} value={shippingCharged} onChange={(_, v) => setShippingCharged(v)} sx={{ color: accent }} />
             </Box>
 
             <Box>
@@ -270,6 +324,23 @@ export default function PodCommerceGodModeTool() {
               </Typography>
               <Slider min={1} max={15} step={1} value={quantity} onChange={(_, v) => setQuantity(v)} sx={{ color: '#38BDF8' }} />
             </Box>
+
+            <Button
+              size="small"
+              variant={printifyPremium ? 'contained' : 'outlined'}
+              onClick={() => setPrintifyPremium(!printifyPremium)}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                bgcolor: printifyPremium ? '#38BDF8' : 'transparent',
+                color: printifyPremium ? '#08080B' : '#38BDF8',
+                borderColor: '#38BDF8',
+                '&:hover': { bgcolor: printifyPremium ? '#7DD3FC' : 'rgba(56,189,248,0.1)' },
+              }}
+            >
+              {printifyPremium ? '★ Printify Premium (-20% Base Cost) ACTIVE' : 'Enable Printify Premium (-20% Base Cost)'}
+            </Button>
 
             <Box
               sx={{
@@ -331,7 +402,7 @@ export default function PodCommerceGodModeTool() {
                   />
                 </Stack>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', mb: 0.75 }}>
-                  Gross: ${q.grossRev} · Print+Ship: ${q.fulfillment} · Fee: ${q.platformFee} · Transit: {q.transitDays}d ({q.customsRisk})
+                  Gross: ${q.grossRev} · POD: ${(q.unitPodCost * quantity).toFixed(2)} · Outbound Ship: ${q.outboundShippingCost} · Fee: ${q.platformFee} · Transit: {q.transitDays}d ({q.customsRisk})
                 </Typography>
                 <LinearProgress
                   variant="determinate"
@@ -363,14 +434,24 @@ export default function PodCommerceGodModeTool() {
                 <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#F5E6AB', fontWeight: 700 }}>
                   SIGNED FULFILLMENT DISPATCH PAYLOAD
                 </Typography>
-                <Button
-                  size="small"
-                  startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={handleCopy}
-                  sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37' }}
-                >
-                  {copied ? 'Copied' : 'Copy JSON'}
-                </Button>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={handleCopy}
+                    sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37' }}
+                  >
+                    {copied ? 'Copied' : 'Copy JSON'}
+                  </Button>
+                  <Button
+                    size="small"
+                    startIcon={<DownloadIcon />}
+                    onClick={handleDownloadJson}
+                    sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#34D399' }}
+                  >
+                    Export .json
+                  </Button>
+                </Stack>
               </Stack>
               <Box
                 component="pre"

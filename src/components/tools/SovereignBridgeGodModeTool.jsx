@@ -22,7 +22,7 @@ import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
-const DEMO_SIGNAL_RECIPIENT = '+1-555-555-0199';
+const DEMO_SIGNAL_RECIPIENT = 'signal://sovereign-enclave.local';
 
 const INITIAL_CHANNELS = [
   {

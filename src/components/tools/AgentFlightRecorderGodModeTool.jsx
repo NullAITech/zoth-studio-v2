@@ -14,6 +14,7 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -212,6 +213,15 @@ export default function AgentFlightRecorderGodModeTool() {
             Tamper-Evident <span style={{ color: '#38BDF8' }}>Merkle DAG</span> Trajectory & Replay Debugger
           </Typography>
         </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<ContentCopyIcon />}
+          onClick={() => navigator.clipboard?.writeText(JSON.stringify(merkleChain, null, 2))}
+          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', borderColor: 'rgba(56,189,248,0.4)' }}
+        >
+          Export Merkle Ledger JSON
+        </Button>
       </Stack>
 
       <Grid container spacing={3}>

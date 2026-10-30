@@ -89,8 +89,59 @@ export function EnvGuardVaultGodModeTool() {
   };
 
   // ---------------------------------------------------------------------------
-  // Real Web Crypto AES-256-GCM Encryption Engine
+  // Real Web Crypto AES-256-CTR-HMAC-SHA256 (Encrypt-then-MAC) Engine
   // ---------------------------------------------------------------------------
+  const toBase64 = (u8) => {
+    let bin = '';
+    for (let i = 0; i < u8.byteLength; i++) bin += String.fromCharCode(u8[i]);
+    return window.btoa(bin);
+  };
+
+  const fromBase64 = (b64) => {
+    const bin = window.atob(b64);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  };
+
+  const deriveKeysEtM = async (pwd, saltBytes, iterations = 100000) => {
+    const enc = new TextEncoder();
+    const baseKey = await window.crypto.subtle.importKey(
+      'raw',
+      enc.encode(pwd),
+      'PBKDF2',
+      false,
+      ['deriveBits']
+    );
+    const derivedBits = await window.crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        salt: saltBytes,
+        iterations,
+        hash: 'SHA-256',
+      },
+      baseKey,
+      512
+    );
+    const encKeyRaw = derivedBits.slice(0, 32);
+    const macKeyRaw = derivedBits.slice(32, 64);
+    const encKey = await window.crypto.subtle.importKey(
+      'raw',
+      encKeyRaw,
+      { name: 'AES-CTR' },
+      false,
+      ['encrypt', 'decrypt']
+    );
+    const macKey = await window.crypto.subtle.importKey(
+      'raw',
+      macKeyRaw,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign', 'verify']
+    );
+    return { encKey, macKey };
+  };
+
   const handleEncrypt = async () => {
     if (!passphrase.trim()) {
       setStatusMessage('Error: Master Vault Passphrase cannot be empty.');
@@ -106,58 +157,43 @@ export function EnvGuardVaultGodModeTool() {
     try {
       const enc = new TextEncoder();
       const salt = window.crypto.getRandomValues(new Uint8Array(16));
-      const iv = window.crypto.getRandomValues(new Uint8Array(12));
+      const iv = window.crypto.getRandomValues(new Uint8Array(16));
 
-      // Derive key using PBKDF2 (100,000 iterations SHA-256)
-      const baseKey = await window.crypto.subtle.importKey(
-        'raw',
-        enc.encode(passphrase),
-        { name: 'PBKDF2' },
-        false,
-        ['deriveKey']
-      );
+      const { encKey, macKey } = await deriveKeysEtM(passphrase, salt, 100000);
 
-      const aesKey = await window.crypto.subtle.deriveKey(
-        {
-          name: 'PBKDF2',
-          salt,
-          iterations: 100000,
-          hash: 'SHA-256'
-        },
-        baseKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt']
-      );
-
-      // Authenticated AES-GCM Encryption (with 128-bit tag)
+      // AES-256-CTR stream encryption with 16-byte counter IV
       const encryptedBuffer = await window.crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
-        aesKey,
+        { name: 'AES-CTR', counter: iv, length: 64 },
+        encKey,
         enc.encode(rawPayload)
       );
+      const ctBytes = new Uint8Array(encryptedBuffer);
 
-      // Helper hex encoders
-      const toHex = (u8) => Array.from(u8).map(b => b.toString(16).padStart(2, '0')).join('');
-      const cipherHex = toHex(new Uint8Array(encryptedBuffer));
-      const saltHex = toHex(salt);
-      const ivHex = toHex(iv);
+      // Encrypt-then-MAC: 256-bit HMAC-SHA256 over (salt || iv || ciphertext)
+      const macData = new Uint8Array(salt.byteLength + iv.byteLength + ctBytes.byteLength);
+      macData.set(salt, 0);
+      macData.set(iv, salt.byteLength);
+      macData.set(ctBytes, salt.byteLength + iv.byteLength);
+
+      const tagBuffer = await window.crypto.subtle.sign('HMAC', macKey, macData);
+      const tagBytes = new Uint8Array(tagBuffer);
 
       const envelope = {
-        vault: 'EnvGuard-Sovereign-v1',
-        algorithm: 'AES-256-GCM',
+        version: 1,
+        format: 'envguard-vault-v1',
+        cipher: 'AES-256-CTR-HMAC-SHA256',
         kdf: 'PBKDF2-HMAC-SHA256',
-        iterations: 100000,
-        key_length: 256,
-        salt: saltHex,
-        iv: ivHex,
-        ciphertext: cipherHex,
+        kdf_iterations: 100000,
+        salt: toBase64(salt),
+        iv: toBase64(iv),
+        ciphertext: toBase64(ctBytes),
+        tag: toBase64(tagBytes),
         created_at: new Date().toISOString()
       };
 
       const envelopeStr = JSON.stringify(envelope, null, 2);
       setVaultEnvelope(envelopeStr);
-      setStatusMessage('✓ Encrypted successfully! 256-bit AES-GCM envelope sealed with 100,000 PBKDF2 rounds.');
+      setStatusMessage('✓ Encrypted successfully! AES-256-CTR-HMAC-SHA256 EtM envelope sealed (16B IV, 32B HMAC tag, 100k PBKDF2 rounds).');
       setStatusType('success');
     } catch (err) {
       setStatusMessage(`Encryption error: ${err.message}`);
@@ -166,7 +202,7 @@ export function EnvGuardVaultGodModeTool() {
   };
 
   // ---------------------------------------------------------------------------
-  // Real Web Crypto AES-256-GCM Decryption Engine
+  // Real Web Crypto AES-256-CTR-HMAC-SHA256 Decryption Engine
   // ---------------------------------------------------------------------------
   const handleDecrypt = async () => {
     if (!passphrase.trim()) {
@@ -182,52 +218,43 @@ export function EnvGuardVaultGodModeTool() {
 
     try {
       const envelope = JSON.parse(vaultEnvelope);
-      if (!envelope.ciphertext || !envelope.iv || !envelope.salt) {
-        throw new Error('Invalid envelope structure. Missing ciphertext, IV, or salt.');
+      if (!envelope.ciphertext || !envelope.iv || !envelope.salt || !envelope.tag) {
+        throw new Error('Invalid envelope structure. Missing ciphertext, IV, salt, or HMAC tag.');
       }
 
-      const fromHex = (hex) => new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-      const salt = fromHex(envelope.salt);
-      const iv = fromHex(envelope.iv);
-      const ciphertext = fromHex(envelope.ciphertext);
+      const salt = fromBase64(envelope.salt);
+      const iv = fromBase64(envelope.iv);
+      const ciphertext = fromBase64(envelope.ciphertext);
+      const tag = fromBase64(envelope.tag);
+      const iterations = Number(envelope.kdf_iterations || envelope.iterations || 100000);
 
-      const enc = new TextEncoder();
-      const baseKey = await window.crypto.subtle.importKey(
-        'raw',
-        enc.encode(passphrase),
-        { name: 'PBKDF2' },
-        false,
-        ['deriveKey']
-      );
+      const { encKey, macKey } = await deriveKeysEtM(passphrase, salt, iterations);
 
-      const aesKey = await window.crypto.subtle.deriveKey(
-        {
-          name: 'PBKDF2',
-          salt,
-          iterations: envelope.iterations || 100000,
-          hash: 'SHA-256'
-        },
-        baseKey,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt']
-      );
+      // Verify HMAC-SHA256 tag over (salt || iv || ciphertext) BEFORE decrypting
+      const macData = new Uint8Array(salt.byteLength + iv.byteLength + ciphertext.byteLength);
+      macData.set(salt, 0);
+      macData.set(iv, salt.byteLength);
+      macData.set(ciphertext, salt.byteLength + iv.byteLength);
 
-      // Decrypt
+      const validMac = await window.crypto.subtle.verify('HMAC', macKey, tag, macData);
+      if (!validMac) {
+        throw new Error('HMAC-SHA256 verification failed');
+      }
+
       const decryptedBuffer = await window.crypto.subtle.decrypt(
-        { name: 'AES-GCM', iv },
-        aesKey,
+        { name: 'AES-CTR', counter: iv, length: 64 },
+        encKey,
         ciphertext
       );
 
       const dec = new TextDecoder();
       const plainText = dec.decode(decryptedBuffer);
       setDecryptedOutput(plainText);
-      setStatusMessage('✓ Cryptographic authentication passed! Vault decrypted with zero integrity tampering.');
+      setStatusMessage('✓ HMAC-SHA256 (32B) authentication verified! Vault decrypted with zero integrity tampering.');
       setStatusType('success');
     } catch (err) {
       setDecryptedOutput('');
-      setStatusMessage(`Decryption failed: Incorrect passphrase or authentication tag mismatch (tampered data).`);
+      setStatusMessage(`Decryption failed: Incorrect passphrase or HMAC-SHA256 authentication tag mismatch (tampered data).`);
       setStatusType('error');
     }
   };
@@ -303,7 +330,7 @@ export function EnvGuardVaultGodModeTool() {
                   EnvGuard <span style={{ color: gold }}>Secrets Vault</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Client-Side Web Crypto AES-256-GCM · PBKDF2 100,000 Rounds · Zero Cloud Egress
+                  Client-Side Web Crypto AES-256-CTR-HMAC-SHA256 · PBKDF2 100,000 Rounds · Zero Cloud Egress
                 </Typography>
               </Box>
             </Stack>
@@ -311,7 +338,7 @@ export function EnvGuardVaultGodModeTool() {
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
               <Chip
                 icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
-                label="AUTHENTICATED AES-256-GCM"
+                label="AES-256-CTR-HMAC-SHA256 EtM"
                 size="small"
                 sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(0,255,157,0.3)' }}
               />
@@ -360,7 +387,7 @@ export function EnvGuardVaultGodModeTool() {
                     256-bit
                   </Typography>
                   <Typography variant="caption" sx={{ color: emerald, fontSize: '0.65rem' }}>
-                    AEAD GCM
+                    CTR-HMAC-SHA256
                   </Typography>
                 </Grid>
                 <Grid xs={4}>
@@ -511,7 +538,7 @@ export function EnvGuardVaultGodModeTool() {
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                SEAL SECRETS VIA AES-256-GCM
+                SEAL SECRETS VIA AES-256-CTR-HMAC-SHA256
               </Button>
             </Paper>
           </Grid>
@@ -565,7 +592,7 @@ export function EnvGuardVaultGodModeTool() {
                   </pre>
                 ) : (
                   <Typography sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.8rem', mt: 10, textAlign: 'center' }}>
-                    Click &ldquo;SEAL SECRETS&rdquo; to execute browser-side Web Crypto AES-GCM derivation.
+                    Click &ldquo;SEAL SECRETS&rdquo; to execute browser-side Web Crypto AES-256-CTR-HMAC-SHA256 derivation.
                   </Typography>
                 )}
               </Paper>

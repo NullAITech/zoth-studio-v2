@@ -4,6 +4,7 @@ import {
   Paper,
   Typography,
   Chip,
+  Button,
   Stack,
   Slider,
   Unstable_Grid2 as Grid,
@@ -12,6 +13,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import SavingsIcon from '@mui/icons-material/Savings';
 import BoltIcon from '@mui/icons-material/Bolt';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -125,36 +127,65 @@ export default function AgentBudgetSentinelGodModeTool() {
         boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
       }}
     >
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-        <Chip
-          icon={<SavingsIcon sx={{ fontSize: '0.95rem !important', color: '#34D399 !important' }} />}
-          label="AGENT BUDGET SENTINEL · FINOPS CIRCUIT BREAKER"
+      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={1.5} sx={{ mb: 3 }}>
+        <Box>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1, flexWrap: 'wrap' }}>
+            <Chip
+              icon={<SavingsIcon sx={{ fontSize: '0.95rem !important', color: '#34D399 !important' }} />}
+              label="AGENT BUDGET SENTINEL · FINOPS CIRCUIT BREAKER"
+              size="small"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+                bgcolor: 'rgba(52,211,153,0.14)',
+                color: '#34D399',
+                border: '1px solid rgba(52,211,153,0.35)',
+              }}
+            />
+            <Chip
+              icon={<BoltIcon sx={{ fontSize: '0.9rem !important', color: '#D4AF37 !important' }} />}
+              label={`LOCAL LOOPBACK OFFLOAD: ${localOffloadPct}%`}
+              size="small"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+                bgcolor: 'rgba(212,175,55,0.14)',
+                color: '#F5E6AB',
+              }}
+            />
+          </Stack>
+          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+            Token Burn-Rate Governor & <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
+          </Typography>
+        </Box>
+        <Button
           size="small"
-          sx={{
-            fontFamily: mono,
-            fontWeight: 800,
-            fontSize: '0.68rem',
-            bgcolor: 'rgba(52,211,153,0.14)',
-            color: '#34D399',
-            border: '1px solid rgba(52,211,153,0.35)',
-          }}
-        />
-        <Chip
-          icon={<BoltIcon sx={{ fontSize: '0.9rem !important', color: '#D4AF37 !important' }} />}
-          label={`LOCAL LOOPBACK OFFLOAD: ${localOffloadPct}%`}
-          size="small"
-          sx={{
-            fontFamily: mono,
-            fontWeight: 800,
-            fontSize: '0.68rem',
-            bgcolor: 'rgba(212,175,55,0.14)',
-            color: '#F5E6AB',
-          }}
-        />
+          variant="outlined"
+          startIcon={<ContentCopyIcon />}
+          onClick={() =>
+            navigator.clipboard?.writeText(
+              JSON.stringify(
+                {
+                  schema: 'zoth/finops-budget-sentinel/v1',
+                  dailyCalls,
+                  avgInputTokens,
+                  avgOutputTokens,
+                  hardCapUsd,
+                  localOffloadPct,
+                  projections,
+                },
+                null,
+                2
+              )
+            )
+          }
+          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', borderColor: 'rgba(52,211,153,0.4)' }}
+        >
+          Export FinOps Policy JSON
+        </Button>
       </Stack>
-      <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400, mb: 3 }}>
-        Token Burn-Rate Governor & <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
-      </Typography>
 
       <Grid container spacing={3}>
         <Grid xs={12} md={5}>

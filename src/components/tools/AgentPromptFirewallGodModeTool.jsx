@@ -14,6 +14,7 @@ import { useTheme } from '@mui/material/styles';
 import SecurityIcon from '@mui/icons-material/Security';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -199,6 +200,15 @@ export default function AgentPromptFirewallGodModeTool() {
             Constitutional Prompt Sanitizer & <span style={{ color: '#F59E0B' }}>Indirect Tool-Poisoning</span> Guard
           </Typography>
         </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<ContentCopyIcon />}
+          onClick={() => navigator.clipboard?.writeText(JSON.stringify(analysis, null, 2))}
+          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F59E0B', borderColor: 'rgba(245,158,11,0.4)' }}
+        >
+          Export WAF Verdict JSON
+        </Button>
       </Stack>
 
       <Grid container spacing={3}>
