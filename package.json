@@ -18,7 +18,8 @@
     "up": "node ./bin/zoth.js up",
     "serve": "node server/serve.mjs --port 3000",
     "test:serve": "node scripts/test-serve.mjs",
-    "test": "python3 scripts/registry-check.py && node scripts/test-serve.mjs",
+    "test:arsenal": "node scripts/test-arsenal.mjs",
+    "test": "python3 scripts/registry-check.py && node scripts/test-arsenal.mjs && node scripts/test-serve.mjs",
     "registry:check": "python3 scripts/registry-check.py",
     "build:release": "bash scripts/build-release-suite.sh"
   },
