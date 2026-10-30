@@ -1019,10 +1019,10 @@ if __name__ == "__main__":
 
       {/* Pro Unlock Key Modal */}
       <Dialog open={proModalOpen} onClose={() => setProModalOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800 }}>Activate MCP Lens Pro</DialogTitle>
+        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800 }}>Support MCP Lens (100% Free & Open Access)</DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Enter your receipt email or Stripe order confirmation ID to activate Pro locally:
+            All features are 100% unlocked for free. Optional support via Stripe or Solana:
           </Typography>
           <TextField
             autoFocus

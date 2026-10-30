@@ -1,25 +1,24 @@
 /**
  * Sovereign Runtime & Device Capability Detection
- * Zoth Studio v2 — Public Web vs Local Sovereign Node Dynamic Adaptation
+ * Zoth Studio v2 — 100% Open-Access In-Browser + Local ZothOS Loopback Detection
  */
 import { useState, useEffect } from 'react';
 
-/**
- * Detects whether Zoth Studio is running in a local sovereign runtime (localhost / 127.0.0.1 / desktop)
- * or in a remote public cloud environment (Netlify, custom domain, remote web server).
- *
- * Supports URL overrides for auditing & testing:
- * - ?remote=1 or ?mock_remote=true forces the remote lockout UI
- * - ?local=1 or ?mock_local=true forces local execution mode
- */
 export function isLocalRuntime() {
-  if (typeof window === 'undefined') return true; // Static prerendering pass
+  if (typeof window === 'undefined') return true;
   const search = window.location.search || '';
   if (search.includes('mock_remote=true') || search.includes('remote=1')) {
     return false;
   }
   if (search.includes('mock_local=true') || search.includes('local=1')) {
     return true;
+  }
+  try {
+    if (localStorage.getItem('zothos_local_detected') === 'true') {
+      return true;
+    }
+  } catch {
+    // ignore
   }
   const hostname = window.location.hostname;
   return (
@@ -33,7 +32,6 @@ export function isLocalRuntime() {
   );
 }
 
-// Global cached promise for WebGPU check to prevent multiple adapter requests
 let webgpuCheckPromise = null;
 
 export async function detectWebGPU() {
@@ -41,7 +39,7 @@ export async function detectWebGPU() {
     return {
       supported: false,
       adapterName: 'None (WebGPU API Missing)',
-      reason: 'navigator.gpu not available in this browser environment.'
+      reason: 'navigator.gpu not available in this browser environment.',
     };
   }
   if (!webgpuCheckPromise) {
@@ -52,19 +50,19 @@ export async function detectWebGPU() {
           return {
             supported: false,
             adapterName: 'None (No GPU Adapter)',
-            reason: 'WebGPU API present, but no suitable hardware GPU adapter found.'
+            reason: 'WebGPU API present, but no suitable hardware GPU adapter found.',
           };
         }
         return {
           supported: true,
           adapterName: adapter.name || 'Hardware Accelerated WebGPU Tensor Core',
-          adapter
+          adapter,
         };
       } catch (err) {
         return {
           supported: false,
           adapterName: 'Unavailable',
-          reason: err.message || 'Failed to initialize WebGPU adapter'
+          reason: err.message || 'Failed to initialize WebGPU adapter',
         };
       }
     })();
@@ -72,89 +70,64 @@ export async function detectWebGPU() {
   return webgpuCheckPromise;
 }
 
-/**
- * Evaluates whether a given tool can be executed/tried in the current runtime environment.
- * On public websites:
- * - Bare-metal host tools (local_cli) CANNOT be tried or run directly.
- * - WebGPU and WebMCP tools CAN be tried and run in-browser if supported by client device.
- * On local sovereign nodes:
- * - Full execution privileges apply to all tools.
- */
+let loopbackCheckPromise = null;
+
+export async function detectZothOSLoopback() {
+  if (typeof window === 'undefined') return true;
+  if (isLocalRuntime()) return true;
+  if (!loopbackCheckPromise) {
+    loopbackCheckPromise = (async () => {
+      const ports = [8094, 8121, 8092, 3000];
+      for (const p of ports) {
+        try {
+          const ctrl = new AbortController();
+          const tid = setTimeout(() => ctrl.abort(), 450);
+          await fetch(`http://127.0.0.1:${p}/`, { mode: 'no-cors', signal: ctrl.signal });
+          clearTimeout(tid);
+          try {
+            localStorage.setItem('zothos_local_detected', 'true');
+          } catch {
+            // ignore
+          }
+          return true;
+        } catch {
+          // try next port
+        }
+      }
+      return false;
+    })();
+  }
+  return loopbackCheckPromise;
+}
+
 export function canExecuteToolOnClient(tool, isLocal, hasWebGPU) {
   if (!tool) {
-    return { canExecute: false, mode: 'unknown', label: 'Unknown Tool', description: 'Tool metadata missing' };
+    return { canExecute: true, mode: 'in_browser_godmode', label: 'Launch Tool ⚡', description: 'Interactive Sovereign Workstation' };
   }
 
-  // Local sovereign environment: full bare-metal & daemon access
   if (isLocal) {
     return {
       canExecute: true,
       mode: 'local_node',
-      badge: 'LOCAL SOVEREIGN NODE',
-      label: 'Run Local Enclave ⚡',
+      badge: 'ZOTHOS INSTALLED + WEBGPU',
+      label: 'Launch Tool ⚡',
       color: '#10B981',
-      description: 'Executes against local hardware registers, loopback Unix sockets, or bare-metal ZothOS.',
+      description: 'Installed in ZothOS (/usr/local/bin) + interactive 60fps in-browser God-Mode Workstation.',
       isLocal: true,
     };
   }
 
-  // Public web environment: check if tool supports client-side in-browser execution
-  const isWebGPUTool = tool.executionType === 'webgpu';
-  const isWebMCPTool = tool.id === 'webmcp-protocol-inspector' || tool.executionType === 'webmcp';
-  const isBrowserTool = tool.executionType === 'browser' || tool.executionType === 'in_browser';
-
-  if (isBrowserTool) {
-    return {
-      canExecute: true,
-      mode: 'in_browser_standalone',
-      badge: 'IN-BROWSER WORKSPACE',
-      label: 'Launch In-Browser Studio ⚡',
-      color: '#10B981',
-      description: '100% in-browser client utility. Runs client-side with zero external dependencies or cloud telemetry.',
-      isLocal: false,
-    };
-  }
-
-  if (isWebGPUTool || isWebMCPTool) {
-    if (hasWebGPU) {
-      return {
-        canExecute: true,
-        mode: 'in_browser_webgpu',
-        badge: 'WEBGPU IN-BROWSER',
-        label: 'Try In-Browser (WebGPU) ⚡',
-        color: '#38BDF8',
-        description: 'Runs client-side on your device GPU via WGSL compute shaders. Zero external network egress.',
-        isLocal: false,
-      };
-    }
-    // WebGPU API not supported on user's device/browser, but in-browser WASM/CPU fallback available
-    return {
-      canExecute: true,
-      mode: 'in_browser_wasm',
-      badge: 'WASM CLIENT FALLBACK',
-      label: 'Try In-Browser (WASM/CPU) ⚡',
-      color: '#F59E0B',
-      description: 'WebGPU not detected; runs client-side in-browser via WebAssembly / CPU SIMD.',
-      isLocal: false,
-    };
-  }
-
-  // Bare-metal / local CLI tool accessed on public web -> Interactive 60fps God-Mode Workstation + CLI
   return {
     canExecute: true,
-    mode: 'in_browser_godmode',
-    badge: 'GOD-MODE WORKSTATION + CLI',
-    label: 'Launch God-Mode Studio ⚡',
-    color: '#D4AF37',
-    description: 'Includes interactive 60fps in-browser God-Mode Workstation + bare-metal ZothOS CLI daemon.',
+    mode: hasWebGPU ? 'in_browser_webgpu' : 'in_browser_godmode',
+    badge: '100% FREE · IN-BROWSER + CLI',
+    label: 'Launch Tool ⚡',
+    color: '#10B981',
+    description: '100% free & unlocked interactive in-browser God-Mode Workstation + ZothOS CLI.',
     isLocal: false,
   };
 }
 
-/**
- * React hook providing dynamic environment detection, WebGPU hardware verification,
- * and adaptive tool execution policies.
- */
 export function useSovereignRuntime() {
   const [isLocal, setIsLocal] = useState(() => isLocalRuntime());
   const [hasWebGPU, setHasWebGPU] = useState(false);
@@ -163,6 +136,9 @@ export function useSovereignRuntime() {
 
   useEffect(() => {
     setIsLocal(isLocalRuntime());
+    detectZothOSLoopback().then((foundLocal) => {
+      if (foundLocal) setIsLocal(true);
+    });
     detectWebGPU().then((res) => {
       setHasWebGPU(res.supported);
       setGpuDetails(res);
@@ -171,21 +147,21 @@ export function useSovereignRuntime() {
   }, []);
 
   let runtimeMode = 'local_sovereign';
-  let badgeLabel = 'LOCAL SOVEREIGN NODE';
+  let badgeLabel = 'ZOTHOS NODE + IN-BROWSER';
   let badgeColor = '#10B981';
-  let badgeTooltip = 'Connected to local hardware loopback (127.0.0.1). Full bare-metal daemon execution unlocked.';
+  let badgeTooltip = 'Connected to ZothOS local hardware loopback (127.0.0.1) + 100% unlocked in-browser workstations.';
 
   if (!isLocal) {
     if (hasWebGPU) {
       runtimeMode = 'public_webgpu';
-      badgeLabel = 'PUBLIC WEB · WEBGPU ACTIVE';
-      badgeColor = '#38BDF8';
-      badgeTooltip = 'Browsing public showcase. In-browser client WebGPU tensor compute unlocked on your device.';
+      badgeLabel = '100% FREE · WEBGPU ACTIVE';
+      badgeColor = '#10B981';
+      badgeTooltip = '100% Free & Open Access. In-browser client WebGPU tensor compute unlocked on your device.';
     } else {
       runtimeMode = 'public_standard';
-      badgeLabel = 'PUBLIC WEB · ZERO-EGRESS';
-      badgeColor = '#F59E0B';
-      badgeTooltip = 'Browsing public showcase. Host execution sealed. WebGPU/WASM micro-tools available.';
+      badgeLabel = '100% FREE · OPEN ACCESS';
+      badgeColor = '#10B981';
+      badgeTooltip = '100% Free & Open Access. All 71 interactive God-Mode Workstations unlocked in-browser.';
     }
   }
 

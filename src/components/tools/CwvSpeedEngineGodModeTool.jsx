@@ -32,7 +32,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckIcon from '@mui/icons-material/Check';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const SAMPLE_HTML = `<!DOCTYPE html>
 <html lang="en">

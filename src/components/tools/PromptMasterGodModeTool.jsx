@@ -26,7 +26,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
 
 const DEFAULT_PROMPT = `Act as a senior autonomous systems engineer and security architect.
 Analyze the user's code repository and identify any SQL injection, SSRF, or hardcoded credential vulnerabilities.
@@ -39,22 +40,8 @@ export default function PromptMasterGodModeTool() {
 
   const [rawPrompt, setRawPrompt] = useState(DEFAULT_PROMPT);
   const [dialectTab, setDialectTab] = useState(0); // 0: Claude XML, 1: OpenAI JSON Schema, 2: DSPy Signature, 3: Ollama Modelfile
-  const [isPro, setIsPro] = useState(true);
-  const [paywallOpen, setPaywallOpen] = useState(false);
-  const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('promptmaster_pro_active') === 'true' || localStorage.getItem('pro_licensed') === 'true') {
-        setIsPro(true);
-        localStorage.setItem('promptmaster_pro_active', 'true');
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
+  const [copiedSol, setCopiedSol] = useState(false);
 
   // Client-Side AST Prompt Linter & Multi-Model Transpiler
   const ast = useMemo(() => {
@@ -176,27 +163,20 @@ ${claudeXml}
   }, [rawPrompt, dialectTab]);
 
   const handleCopy = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     navigator.clipboard?.writeText(ast.activeOutput);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleActivateLicense = () => {
-    if (licenseInput.trim().length >= 4) {
-      localStorage.setItem('promptmaster_pro_active', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setIsPro(true);
-      setPaywallOpen(false);
-    }
+  const handleCopySolana = () => {
+    navigator.clipboard?.writeText(SOLANA_WALLET);
+    setCopiedSol(true);
+    setTimeout(() => setCopiedSol(false), 2200);
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Founding Sales Banner */}
+      {/* 100% Free & Open Access + Support Bar */}
       <Paper
         elevation={0}
         sx={{
@@ -214,7 +194,7 @@ ${claudeXml}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
+            label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{ bgcolor: '#C084FC', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -222,29 +202,27 @@ ${claudeXml}
             Real-Time AST Prompt Linter, Claude XML / OpenAI Strict Schema / DSPy / Ollama Compiler
           </Typography>
         </Box>
-        {!isPro && (
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              variant="contained"
-              href={STRIPE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
-            >
-              ☕ Buy Us a Coffee (Stripe)
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => setPaywallOpen(true)}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
-              sx={{ borderColor: '#C084FC', color: isDark ? '#C084FC' : '#7E22CE', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        )}
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+          <Button
+            size="small"
+            variant="contained"
+            href={STRIPE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
+          >
+            ☕ Buy Us a Coffee (Stripe)
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleCopySolana}
+            href={`solana:${SOLANA_WALLET}`}
+            sx={{ borderColor: '#14F195', color: isDark ? '#14F195' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
+          >
+            {copiedSol ? '✓ Copied GG2e...dXoK!' : '◎ Solana Tip (GG2e...dXoK)'}
+          </Button>
+        </Stack>
       </Paper>
 
       <Grid container spacing={3}>
@@ -293,7 +271,7 @@ ${claudeXml}
           </Paper>
         </Grid>
 
-        {/* Right: Multi-Model Dialect Transpiler with Frosted Glass Lock */}
+        {/* Right: Multi-Model Dialect Transpiler (100% Unlocked) */}
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, height: '100%', borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
             <Tabs value={dialectTab} onChange={(_, v) => setDialectTab(v)} variant="scrollable" scrollButtons="auto" sx={{ mb: 2, minHeight: 36 }}>
@@ -318,44 +296,10 @@ ${claudeXml}
                   overflowX: 'auto',
                   maxHeight: 270,
                   flexGrow: 1,
-                  filter: isPro ? 'none' : 'blur(6px)',
-                  userSelect: isPro ? 'auto' : 'none',
                 }}
               >
                 {ast.activeOutput}
               </Box>
-              {!isPro && (
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'rgba(8,8,12,0.58)',
-                    borderRadius: 2,
-                    p: 2,
-                    textAlign: 'center',
-                  }}
-                >
-                  <LockIcon sx={{ fontSize: 34, color: '#D4AF37', mb: 1 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF', mb: 0.5 }}>
-                    Compiled Multi-Model Prompt Artifact Locked
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 320, mb: 1.5 }}>
-                    Unlock full Anthropic XML, OpenAI Strict Schema, DSPy & Ollama Modelfile export (free).
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => setPaywallOpen(true)}
-                    sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
-                  >
-                    ☕ Buy Us a Coffee
-                  </Button>
-                </Box>
-              )}
             </Box>
 
             <Button
@@ -370,41 +314,6 @@ ${claudeXml}
           </Paper>
         </Grid>
       </Grid>
-
-      <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Support PromptMaster Studio (optional tip)</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Free multi-model AST prompt transpilation (Claude XML, OpenAI JSON Schema, DSPy Signatures, and Ollama Modelfiles).
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            href={STRIPE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
-          >
-            Leave an optional tip via Stripe
-          </Button>
-          <Divider sx={{ my: 1.5 }} />
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Optional: your name or a note"
-              value={licenseInput}
-              onChange={(e) => setLicenseInput(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleActivateLicense} sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}>
-              Activate
-            </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPaywallOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

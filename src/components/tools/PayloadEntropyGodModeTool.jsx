@@ -562,7 +562,7 @@ SecRule REQUEST_BODY "@rx .+" \\
               <Button
                 variant="contained"
                 size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}

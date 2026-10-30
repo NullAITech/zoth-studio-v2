@@ -191,34 +191,16 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
 
           <Chip
             size="small"
-            label={
-              runtime?.isLocal
-                ? 'Local Sovereign Node'
-                : item.executionType === 'webgpu'
-                  ? 'WebGPU In-Browser'
-                  : 'Bare-Metal Enclave'
-            }
+            label={item.localPort ? `✦ Free · ZothOS :${item.localPort}` : '✦ 100% Free & Open'}
             sx={{
               height: 22,
               fontSize: '0.65rem',
               fontWeight: 800,
               fontFamily: mono,
-              bgcolor: runtime?.isLocal
-                ? (isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3')
-                : item.executionType === 'webgpu'
-                  ? (isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF')
-                  : (isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2'),
-              color: runtime?.isLocal
-                ? (isDark ? '#34D399' : '#047857')
-                : item.executionType === 'webgpu'
-                  ? (isDark ? '#38BDF8' : '#0369A1')
-                  : (isDark ? '#FCA5A5' : '#B91C1C'),
+              bgcolor: isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3',
+              color: isDark ? '#34D399' : '#047857',
               border: '1px solid',
-              borderColor: runtime?.isLocal
-                ? (isDark ? 'rgba(52, 211, 153, 0.3)' : '#A7F3D0')
-                : item.executionType === 'webgpu'
-                  ? (isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD')
-                  : (isDark ? 'rgba(239, 68, 68, 0.3)' : '#FCA5A5'),
+              borderColor: isDark ? 'rgba(52, 211, 153, 0.35)' : '#A7F3D0',
             }}
           />
         </Box>
@@ -323,48 +305,55 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
       </CardContent>
 
       <CardActions sx={{ px: 2.5, pb: 2.5, pt: 0, gap: 1, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Button
-          size="small"
-          variant={execEval.canExecute ? "contained" : "outlined"}
-          component={RouterLink}
-          to={item.target}
-          startIcon={
-            runtime?.isLocal ? (
-              <FlashOnIcon sx={{ fontSize: '0.95rem' }} />
-            ) : execEval.canExecute ? (
-              <RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />
-            ) : (
-              <TerminalIcon sx={{ fontSize: '0.95rem' }} />
-            )
-          }
-          sx={{
-            bgcolor: execEval.canExecute
-              ? (runtime?.isLocal ? (isDark ? '#10B981' : '#047857') : (isDark ? '#38BDF8' : '#0369A1'))
-              : 'transparent',
-            borderColor: execEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
-            color: execEval.canExecute
-              ? '#FFFFFF'
-              : (isDark ? '#F5E6AB' : '#8A6A09'),
-            fontWeight: 800,
-            fontSize: '0.78rem',
-            px: 2.5,
-            py: 0.6,
-            borderRadius: 9999,
-            boxShadow: execEval.canExecute
-              ? (isDark ? '0 2px 10px rgba(56, 189, 248, 0.3)' : '0 2px 10px rgba(2, 132, 199, 0.2)')
-              : 'none',
-            '&:hover': {
-              bgcolor: execEval.canExecute
-                ? (runtime?.isLocal ? '#34D399' : '#7DD3FC')
-                : (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7'),
-              borderColor: gold.accent,
-              color: execEval.canExecute ? '#0B0B12' : gold.accent,
-            },
-            transition: 'all 0.2s ease',
-          }}
-        >
-          {runtime?.isLocal ? 'Launch Tool ⚡' : execEval.label}
-        </Button>
+        <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Button
+            size="small"
+            variant="contained"
+            component={RouterLink}
+            to={item.target}
+            startIcon={<FlashOnIcon sx={{ fontSize: '0.95rem' }} />}
+            sx={{
+              bgcolor: isDark ? '#10B981' : '#047857',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.76rem',
+              px: 2,
+              py: 0.55,
+              borderRadius: 9999,
+              boxShadow: isDark ? '0 2px 10px rgba(16, 185, 129, 0.3)' : '0 2px 10px rgba(4, 120, 87, 0.2)',
+              '&:hover': {
+                bgcolor: '#34D399',
+                color: '#08080B',
+              },
+              transition: 'all 0.2s ease',
+            }}
+          >
+            Launch Tool ⚡
+          </Button>
+          {item.localPort && (
+            <Button
+              size="small"
+              variant="outlined"
+              component="a"
+              href={item.localUrl || `http://127.0.0.1:${item.localPort}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+                px: 1.2,
+                py: 0.45,
+                borderRadius: 9999,
+                borderColor: gold.border,
+                color: gold.accent,
+                '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+              }}
+            >
+              Local :{item.localPort}
+            </Button>
+          )}
+        </Box>
 
         {item.github && (
           <Button
@@ -502,94 +491,93 @@ export default function ArsenalPage() {
           </Box>
         </HeroReveal>
 
-        {/* Remote Host Air-Gap Lockout Notice */}
-        {!isLocal && (
-          <Paper
-            elevation={0}
-            sx={{
-              p: 2.5,
-              mb: 3.5,
-              borderRadius: 3,
-              bgcolor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
-              border: '1.5px solid',
-              borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 2,
-              boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 780, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
-              <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
-                <LockIcon sx={{ fontSize: 28 }} />
-              </Box>
-              <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                  <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#EF4444' }}>
-                    REMOTE CLOUD HOST DETECTED — AIR-GAP ENCLAVE LOCKED
-                  </Typography>
-                  <Chip
-                    label="DIRECT EXECUTION PREVENTED"
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.64rem',
-                      fontWeight: 800,
-                      bgcolor: isDark ? '#1F2937' : '#E5E7EB',
-                      color: isDark ? '#FCA5A5' : '#991B1B',
-                    }}
-                  />
-                </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                  You are viewing the sovereign arsenal over a public web host. Local daemons and raw hardware hooks cannot bind over remote HTTP. To execute any tool with zero telemetry, deploy the full OS via <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or copy the standalone repository <code>git clone</code> commands below.
-                </Typography>
-              </Box>
+        {/* 100% Free & Open Access + Support Banner */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 2.5,
+            mb: 3.5,
+            borderRadius: 3,
+            bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
+            border: '1.5px solid',
+            borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#A7F3D0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 780, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
+            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
+              <VerifiedUserIcon sx={{ fontSize: 28 }} />
             </Box>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: isDark ? '#34D399' : '#047857' }}>
+                  ✦ 100% FREE & OPEN ACCESS — ALL 71 TOOLS UNLOCKED IN-BROWSER & INSTALLED IN ZOTHOS
+                </Typography>
+                <Chip
+                  label="ZERO PAYWALLS"
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.64rem',
+                    fontWeight: 800,
+                    bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF3C7',
+                    color: gold.accent,
+                  }}
+                />
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
+                Every tool in the Sovereign Arsenal runs 100% free in your browser (with interactive God-Mode Workstations & Universal Output Workbenches) AND is pre-installed in ZothOS (<code>/usr/local/bin/&lt;tool-id&gt;</code> &amp; local loopback ports). Optional community support via Stripe or Solana:
+              </Typography>
+            </Box>
+          </Box>
 
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-              <Button
-                component={RouterLink}
-                to="/zoth-os"
-                variant="contained"
-                size="small"
-                startIcon={<RocketLaunchIcon />}
-                sx={{
-                  bgcolor: '#D4AF37',
-                  color: '#08080B',
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.78rem',
-                  py: 1,
-                  px: 2,
-                  width: { xs: '100%', sm: 'auto' },
-                  '&:hover': { bgcolor: '#F5E6AB' },
-                }}
-              >
-                Boot Zoth OS
-              </Button>
-              <Button
-                component={RouterLink}
-                to="/tools"
-                variant="outlined"
-                size="small"
-                sx={{
-                  borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#059669',
-                  color: isDark ? '#34D399' : '#065F46',
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.78rem',
-                  py: 1,
-                  px: 2,
-                  width: { xs: '100%', sm: 'auto' },
-                }}
-              >
-                Interactive Catalog
-              </Button>
-            </Stack>
-          </Paper>
-        )}
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+            <Button
+              component="a"
+              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="contained"
+              size="small"
+              sx={{
+                bgcolor: '#D4AF37',
+                color: '#08080B',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.76rem',
+                py: 1,
+                px: 2,
+                width: { xs: '100%', sm: 'auto' },
+                '&:hover': { bgcolor: '#F5E6AB' },
+              }}
+            >
+              ☕ Buy Us a Coffee (Stripe)
+            </Button>
+            <Button
+              component="a"
+              href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+              onClick={() => navigator?.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')}
+              variant="outlined"
+              size="small"
+              sx={{
+                borderColor: isDark ? 'rgba(20, 241, 149, 0.45)' : '#059669',
+                color: isDark ? '#14F195' : '#065F46',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.76rem',
+                py: 1,
+                px: 2,
+                width: { xs: '100%', sm: 'auto' },
+              }}
+            >
+              ◎ Solana Tip (GG2e...dXoK)
+            </Button>
+          </Stack>
+        </Paper>
 
         {/* Telemetry Stats Bar */}
         <RevealOnScroll preset="fadeUp" delay={0.2}>

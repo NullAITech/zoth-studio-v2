@@ -35,7 +35,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import HubIcon from '@mui/icons-material/Hub';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const RESEARCH_PRESETS = {
   stdp: {

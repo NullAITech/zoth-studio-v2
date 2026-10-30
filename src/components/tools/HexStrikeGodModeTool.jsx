@@ -2217,7 +2217,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                   onClick={() => setShowPaywallModal(true)}
                   sx={{ color: 'text.secondary', fontSize: '0.75rem', textDecoration: 'underline' }}
                 >
-                  Already purchased? Enter receipt key to activate instantly
+                  100% Free & Open Access — Optional Buy Us a Coffee or Solana Tip
                 </Button>
               </Paper>
             </Box>

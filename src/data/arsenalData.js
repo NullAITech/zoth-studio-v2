@@ -1,21 +1,15 @@
 /**
  * Zoth Studio v2 - Sovereign Master Arsenal & Unified Catalog
  *
- * Consolidates the 25 curated sovereign tools and micro-repositories into a single
- * offline-capable catalog with real GitHub references and zero localhost port traps.
+ * Consolidates all 71 sovereign tools and micro-repositories into a single
+ * 100% open-access catalog with interactive in-browser God-Mode Workstations,
+ * ZothOS local ports, CLI binaries (/usr/local/bin/<id>), and GitHub references.
  */
 
 import { microTools } from './toolsData';
 
-// Helper to convert microTool to unified asset
 function toolToAsset(t) {
-  let target = `/tools/${t.id}`;
-  if (t.id === 'zoth-webgen') target = '/webgen';
-  if (t.id === 'zoth-swarm-multiplexer') target = '/swarm';
-  if (t.id === 'NullAI-HexStrike-AI-Terminal') target = '/hexstrike';
-  if (t.id === 'adytum-alchemist-ai-workflow') target = '/adytum';
-  if (t.id === 'neuro-memory-daemon') target = '/memory';
-  if (t.id === 'sovereign-agent-bridge') target = '/bridges';
+  const target = `/tools/${t.id}`;
 
   return {
     id: t.id,
@@ -24,14 +18,14 @@ function toolToAsset(t) {
     category: t.category,
     target,
     description: t.description,
-    badge: t.executionType === 'webgpu' ? 'WEBGPU TOOL' : (t.localPort ? `PORT :${t.localPort}` : 'LOCAL CLI TOOL'),
-    status: t.executionType === 'webgpu' ? 'Browser Native' : (t.localPort ? `Daemon :${t.localPort}` : 'Local Binary'),
-    pullCommand: t.pull,
+    badge: t.localPort ? `WEBGPU + :${t.localPort}` : 'WEBGPU + CLI',
+    status: t.localPort ? `ZothOS :${t.localPort}` : 'In-Browser + CLI',
+    pullCommand: t.pull || `${t.id} --help  # or: git clone https://github.com/NullAITech/${t.repo || t.id}.git`,
     github: t.github,
     version: t.version,
     executionType: t.executionType,
     localPort: t.localPort,
-    localUrl: t.localUrl,
+    localUrl: t.localUrl || (t.localPort ? `http://127.0.0.1:${t.localPort}` : undefined),
     liveUrl: t.liveUrl,
     isFlagship: [
       'zoth-webgen',
@@ -44,20 +38,17 @@ function toolToAsset(t) {
       'agent-capsule-jail',
       'agent-policy-auditor',
       'subsweep-lead-scanner',
-      'envguard-secrets-vault'
+      'envguard-secrets-vault',
     ].includes(t.id),
   };
 }
 
-// Master unified arsenal
 export const masterArsenal = microTools.map(toolToAsset);
 
-// Helper lookup
 export function getAssetById(id) {
   return masterArsenal.find((a) => a.id === id);
 }
 
-// Unified Counts
 export const arsenalStats = {
   total: microTools.length,
   tools: microTools.length,

@@ -682,7 +682,7 @@ export function AgentCapsuleJailGodModeTool() {
           <Stack direction="row" spacing={1.5} alignItems="center">
             <ShieldIcon sx={{ color: gold }} />
             <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              Agent Capsule Jail Pro Sovereign License
+              Agent Capsule Jail 100% Free & Open Access — Community Support
             </Typography>
           </Stack>
         </DialogTitle>
@@ -702,7 +702,7 @@ export function AgentCapsuleJailGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}

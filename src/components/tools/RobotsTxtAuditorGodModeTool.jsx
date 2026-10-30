@@ -913,7 +913,7 @@ export default function RobotsTxtAuditorGodModeTool() {
           <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
             <Button
               variant="contained"
-              href="https://github.com/1nc0gn30/zoth-studio-v2"
+              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
