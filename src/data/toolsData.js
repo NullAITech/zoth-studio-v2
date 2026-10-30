@@ -1083,7 +1083,7 @@ export const microTools = [
   },
   {
     id: 'yara-sigma-forge',
-    published: true,
+    published: false,
     name: 'YARA-X & Sigma Threat Rule Forge',
     repo: 'zoth-yara-forge',
     category: 'Security & Recon',
@@ -1100,7 +1100,7 @@ export const microTools = [
   },
   {
     id: 'reality-shader-forge',
-    published: true,
+    published: false,
     name: 'Zoth Reality Shader & Theme Forge',
     repo: 'zoth-theme-forge',
     category: 'Media & 3D',
