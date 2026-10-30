@@ -924,7 +924,7 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "version": "2.5.0",
@@ -942,7 +942,7 @@
       "name": "Zoth Bolt",
       "description": "Flagship Full-Stack AI Web & Motion Architect on 127.0.0.1:5173. Supports 23+ AI providers, local CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ free SVG & 16-bit Pixel Art icons, MCP asset bridge, and live WebContainers.",
       "category": "Autonomous Web",
-      "github": "https://github.com/1nc0gn30/zoth-webgen",
+      "github": "https://github.com/stackblitz-labs/bolt.diy",
       "version": "3.5.0",
       "pull": "git clone https://github.com/1nc0gn30/zoth-webgen.git ~/NullAITech/bolt.diy && cd ~/NullAITech/bolt.diy && npm run dev",
       "execution_type": "local_cli",
@@ -1117,9 +1117,9 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex guide stream via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex guide stream via zoth-relay-mobile.",
       "category": "Swarm & Core",
-      "github": "https://github.com/1nc0gn30/zoth-relay",
+      "github": "https://github.com/1nc0gn30/zela-glasses-guide",
       "version": "0.5.0",
       "pull": "open https://zela-glasses-guide.netlify.app",
       "execution_type": "browser",
@@ -1164,7 +1164,7 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
       "version": "1.0.0",
