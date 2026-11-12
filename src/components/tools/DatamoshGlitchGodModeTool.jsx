@@ -234,6 +234,46 @@ export default function DatamoshGlitchGodModeTool() {
     a.click();
   };
 
+  const [recordingVideo, setRecordingVideo] = useState(false);
+
+  const handleRecordWebM = (durationSec = 4.0) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !canvas.captureStream || recordingVideo) return;
+    try {
+      setRecordingVideo(true);
+      const stream = canvas.captureStream(30);
+      const chunks = [];
+      const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+        ? 'video/webm;codecs=vp9'
+        : MediaRecorder.isTypeSupported('video/webm')
+        ? 'video/webm'
+        : '';
+      const recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunks.push(e.data);
+      };
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: recorder.mimeType || 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `datamosh_${selectedPreset.id}_${Date.now()}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        setRecordingVideo(false);
+      };
+      recorder.start();
+      setTimeout(() => {
+        recorder.stop();
+      }, durationSec * 1000);
+    } catch (e) {
+      setRecordingVideo(false);
+      handleDownload();
+    }
+  };
+
   const randomizeParams = () => {
     setShiftMax(Math.floor(Math.random() * 55) + 10);
     setRgbSplit(Math.floor(Math.random() * 20));
@@ -412,22 +452,41 @@ export default function DatamoshGlitchGodModeTool() {
                     </Button>
                   </Stack>
 
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleDownload}
-                    startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.75rem',
-                      fontWeight: 800,
-                      bgcolor: gold,
-                      color: '#08080B',
-                      '&:hover': { bgcolor: '#C5A028' }
-                    }}
-                  >
-                    Download Frame (PNG)
-                  </Button>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleRecordWebM(4.0)}
+                      disabled={recordingVideo}
+                      startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        borderColor: '#F43F5E',
+                        color: '#F43F5E',
+                        '&:hover': { bgcolor: 'rgba(244,63,94,0.1)' }
+                      }}
+                    >
+                      {recordingVideo ? 'Recording...' : '⏺ Record WebM (4s)'}
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={handleDownload}
+                      startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        bgcolor: gold,
+                        color: '#08080B',
+                        '&:hover': { bgcolor: '#C5A028' }
+                      }}
+                    >
+                      Download Frame (PNG)
+                    </Button>
+                  </Stack>
                 </Box>
 
                 <Box sx={{ width: '100%', mt: 2, pt: 1.5, borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`, display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', fontFamily: mono, color: isDark ? '#94A3B8' : '#64748B' }}>
