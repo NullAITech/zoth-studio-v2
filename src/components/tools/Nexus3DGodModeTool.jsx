@@ -339,6 +339,73 @@ export default function Nexus3DGodModeTool() {
     a.click();
   };
 
+  const exportGLTF = () => {
+    const { points, edges } = getShapeData();
+    const positions = [];
+    let min = [Infinity, Infinity, Infinity];
+    let max = [-Infinity, -Infinity, -Infinity];
+
+    points.forEach(([x, y, z]) => {
+      const px = x / 50, py = y / 50, pz = z / 50;
+      positions.push(px, py, pz);
+      min[0] = Math.min(min[0], px); min[1] = Math.min(min[1], py); min[2] = Math.min(min[2], pz);
+      max[0] = Math.max(max[0], px); max[1] = Math.max(max[1], py); max[2] = Math.max(max[2], pz);
+    });
+
+    const indices = [];
+    edges.forEach(([i, j]) => {
+      indices.push(i, j);
+    });
+
+    const posFloat = new Float32Array(positions);
+    const idxUint = new Uint16Array(indices);
+    const posBytes = new Uint8Array(posFloat.buffer);
+    const idxBytes = new Uint8Array(idxUint.buffer);
+
+    const totalLen = posBytes.byteLength + idxBytes.byteLength;
+    const combined = new Uint8Array(totalLen);
+    combined.set(posBytes, 0);
+    combined.set(idxBytes, posBytes.byteLength);
+
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < combined.byteLength; i += chunkSize) {
+      const chunk = combined.subarray(i, Math.min(i + chunkSize, combined.byteLength));
+      binary += String.fromCharCode.apply(null, chunk);
+    }
+    const base64Uri = 'data:application/octet-stream;base64,' + btoa(binary);
+
+    const gltf = {
+      asset: { version: "2.0", generator: "Nexus 3D God Mode Studio" },
+      scene: 0,
+      scenes: [{ nodes: [0] }],
+      nodes: [{ mesh: 0, name: selectedShape.name }],
+      meshes: [{
+        name: selectedShape.name,
+        primitives: [{
+          attributes: { POSITION: 0 },
+          indices: 1,
+          mode: 1 // LINES
+        }]
+      }],
+      buffers: [{ byteLength: totalLen, uri: base64Uri }],
+      bufferViews: [
+        { buffer: 0, byteOffset: 0, byteLength: posBytes.byteLength, target: 34962 },
+        { buffer: 0, byteOffset: posBytes.byteLength, byteLength: idxBytes.byteLength, target: 34963 }
+      ],
+      accessors: [
+        { bufferView: 0, byteOffset: 0, componentType: 5126, count: points.length, type: "VEC3", max, min },
+        { bufferView: 1, byteOffset: 0, componentType: 5123, count: indices.length, type: "SCALAR" }
+      ]
+    };
+
+    const blob = new Blob([JSON.stringify(gltf, null, 2)], { type: 'model/gltf+json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `nexus3d_${selectedShape.id}_${Date.now()}.gltf`;
+    a.click();
+  };
+
   return (
     <Box sx={{ width: '100%', mt: 1 }}>
       <Paper
@@ -541,6 +608,21 @@ export default function Nexus3DGodModeTool() {
                       }}
                     >
                       Export STL
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={exportGLTF}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        borderColor: 'rgba(56,189,248,0.5)',
+                        color: '#38BDF8',
+                        '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' }
+                      }}
+                    >
+                      Export GLTF
                     </Button>
                   </Stack>
                 </Box>
