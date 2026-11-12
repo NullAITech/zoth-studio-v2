@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
   "generated_at": "2026-11-12T05:00:00.000Z",
-  "tool_count": 78,
+  "tool_count": 79,
   "tools": [
     {
       "id": "pixel-cast",
@@ -1565,6 +1565,26 @@
       ],
       "port": 5185,
       "local_url": "http://127.0.0.1:5185"
+    },
+    {
+      "id": "zoth-obsidian-tracker",
+      "name": "Zoth Obsidian Tracker",
+      "description": "Sovereign Second Brain vault explorer, 5 Ecosystem Pillars, 7-APK Master Roadmap, and 78-tool verification matrix with live screenrecordings on :8151.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zoth-obsidian-tracker",
+      "live_url": "https://zs-obsidian-tracker.nullai.tech",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-obsidian-tracker/",
+      "version": "1.2.0",
+      "pull": "zoth-obsidian-tracker --status  # or: zoth-obsidian-tracker-tui | zoth-obsidian-tracker --pillars",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8151,
+      "local_url": "http://127.0.0.1:8151"
     }
   ]
 }

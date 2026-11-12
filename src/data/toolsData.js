@@ -1475,6 +1475,25 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:5185',
     version: '1.0.0',
     pull: 'creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status',
+  },
+  {
+    id: 'zoth-obsidian-tracker',
+    published: true,
+    name: 'Zoth Obsidian Tracker',
+    repo: 'zoth-obsidian-tracker',
+    category: 'Swarm & Core',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/zoth-obsidian-tracker',
+    liveUrl: 'https://zs-obsidian-tracker.nullai.tech',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Sovereign Second Brain vault explorer, 5 Ecosystem Pillars, 7-APK Master Roadmap, and 78-tool verification matrix with live screenrecordings on :8151.',
+    localPort: 8151,
+    localUrl: 'http://127.0.0.1:8151',
+    version: '1.2.0',
+    pull: 'zoth-obsidian-tracker --status  # or: zoth-obsidian-tracker-tui | zoth-obsidian-tracker --pillars',
   }
 ];
 
