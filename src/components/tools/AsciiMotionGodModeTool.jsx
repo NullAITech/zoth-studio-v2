@@ -646,6 +646,19 @@ ${textNodes}
     setTimeout(() => setCopiedMode(null), 1800);
   };
 
+  const downloadAnsi = () => {
+    const script = `#!/usr/bin/env bash\n# ==============================================================================\n# Zoth ASCII Magic Studio — TrueColor ANSI Export\n# Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform\n# Run: bash this_file.sh\n# ==============================================================================\ncat << 'EOF'\n${lastAnsiRef.current || ''}\nEOF\n`;
+    const blob = new Blob([script], { type: 'application/x-sh;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zoth_ascii_art_${preset}.sh`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setCopiedMode('ansi-download');
+    setTimeout(() => setCopiedMode(null), 1800);
+  };
+
   const [recordingVideo, setRecordingVideo] = useState(false);
 
   const handleRecordVideo = (durationSec = 5.0) => {
@@ -907,6 +920,22 @@ ${textNodes}
             }}
           >
             {copiedMode === 'svg-download' ? 'Downloaded' : 'Download SVG'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={downloadAnsi}
+            startIcon={copiedMode === 'ansi-download' ? <CheckIcon sx={{ fontSize: 15 }} /> : <DownloadIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#10B981',
+              borderColor: 'rgba(16,185,129,0.45)',
+              bgcolor: 'rgba(16,185,129,0.1)',
+            }}
+          >
+            {copiedMode === 'ansi-download' ? 'Exported .sh' : 'Export ANSI (.sh)'}
           </Button>
           <Button
             size="small"
