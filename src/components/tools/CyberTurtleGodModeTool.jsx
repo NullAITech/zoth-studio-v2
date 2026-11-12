@@ -62,6 +62,7 @@ export default function CyberTurtleGodModeTool() {
   const [isSynthesizing, setIsSynthesizing] = useState(false);
 
   const canvasRef = useRef(null);
+  const segmentsRef = useRef([]);
 
   // Generate expanded L-system string
   const expandLSystem = (ax, rulesObj, iters) => {
@@ -132,7 +133,7 @@ export default function CyberTurtleGodModeTool() {
       pathD += `M ${s.x1.toFixed(2)} ${s.y1.toFixed(2)} L ${s.x2.toFixed(2)} ${s.y2.toFixed(2)} `;
     }
 
-    return { pathD, vb, stats: { segments: segments.length, drawDistance: Math.round(totalDraw), rapidTravel: Math.round(totalRapid) } };
+    return { segments, pathD, vb, stats: { segments: segments.length, drawDistance: Math.round(totalDraw), rapidTravel: Math.round(totalRapid) } };
   };
 
   const handleSelectPreset = (p) => {
@@ -154,7 +155,8 @@ export default function CyberTurtleGodModeTool() {
           if (k && v) rulesObj[k.trim()] = v.trim();
         });
         const expanded = expandLSystem(axiom, rulesObj, iterations);
-        const { pathD, vb, stats: s } = interpretTurtle(expanded, angle);
+        const { segments, pathD, vb, stats: s } = interpretTurtle(expanded, angle);
+        segmentsRef.current = segments;
         setSvgPathData(pathD);
         setViewBox(vb);
         setStats(s);
@@ -193,18 +195,44 @@ export default function CyberTurtleGodModeTool() {
   };
 
   const handleDownloadGCode = () => {
-    const gcode = `; Cyber Turtle Studio CNC G-Code Generator
-; Preset: ${selectedPreset.name} (Segments: ${stats.segments})
-; Total Draw: ${stats.drawDistance}mm | Rapid Travel: ${stats.rapidTravel}mm
-G21 ; millimeter units
-G90 ; absolute coordinates
-G0 Z5.000 F3000 (pen up)
-G0 X0.0 Y0.0
-G1 Z0.000 F300 (pen down)
-G1 X20.0 Y20.0 F1200
-G0 Z5.000 (pen up)
-M2 ; program complete`;
-    const blob = new Blob([gcode], { type: 'text/plain' });
+    const segs = segmentsRef.current || [];
+    let gcode = `( ========================================================= )\n`;
+    gcode += `( Cyber Turtle Studio — Real-Time CNC Plotter G-Code        )\n`;
+    gcode += `( Preset: ${selectedPreset.name} | Total Segments: ${segs.length} )\n`;
+    gcode += `( ========================================================= )\n`;
+    gcode += `G21 (All units in mm)\n`;
+    gcode += `G90 (Absolute coordinates)\n`;
+    gcode += `G17 (XY plane)\n`;
+    gcode += `G0 Z5.000 F3000 (Pen up / safe rapid)\n`;
+
+    let penDown = false;
+    let lastX = null;
+    let lastY = null;
+
+    for (let s of segs) {
+      if (lastX === null || Math.hypot(s.x1 - lastX, s.y1 - lastY) > 0.05) {
+        if (penDown) {
+          gcode += `G0 Z5.000 (Pen up)\n`;
+          penDown = false;
+        }
+        gcode += `G0 X${s.x1.toFixed(3)} Y${s.y1.toFixed(3)} F3000 (Rapid to start)\n`;
+      }
+      if (!penDown) {
+        gcode += `G1 Z0.000 F600 (Pen down)\n`;
+        penDown = true;
+      }
+      gcode += `G1 X${s.x2.toFixed(3)} Y${s.y2.toFixed(3)} F1200\n`;
+      lastX = s.x2;
+      lastY = s.y2;
+    }
+
+    if (penDown) {
+      gcode += `G0 Z5.000 (Pen up)\n`;
+    }
+    gcode += `G0 X0.000 Y0.000 (Return to origin)\n`;
+    gcode += `M2 (Program End)\n`;
+
+    const blob = new Blob([gcode], { type: 'text/x-gcode;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
