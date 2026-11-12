@@ -1456,6 +1456,25 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:9900',
     version: '1.2.0',
     pull: 'zothnet run --alias "Studio-Node"  # or: zothnet status --json | zothnet mcp',
+  },
+  {
+    id: 'creatorplaybooks',
+    published: true,
+    name: 'CreatorPlaybooks',
+    repo: 'creatorplaybooks',
+    category: 'Education & Growth',
+    executionType: 'browser',
+    github: 'https://github.com/1nc0gn30/creatorplaybooks',
+    liveUrl: 'https://creatorplaybooks.netlify.app',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Curated reading lists, tactical playbooks, and business mental models from top creators and operators with zero-tracking client-side search on :5185.',
+    localPort: 5185,
+    localUrl: 'http://127.0.0.1:5185',
+    version: '1.0.0',
+    pull: 'creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status',
   }
 ];
 

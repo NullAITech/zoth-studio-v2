@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-11-10T17:38:15.234Z",
-  "tool_count": 77,
+  "generated_at": "2026-11-12T05:00:00.000Z",
+  "tool_count": 78,
   "tools": [
     {
       "id": "pixel-cast",
@@ -1544,6 +1544,27 @@
       ],
       "port": 9900,
       "local_url": "http://127.0.0.1:9900"
+    },
+    {
+      "id": "creatorplaybooks",
+      "name": "CreatorPlaybooks",
+      "description": "Curated reading lists, tactical playbooks, and business mental models from top creators and operators with zero-tracking client-side search on :5185.",
+      "category": "Education & Growth",
+      "github": "https://github.com/1nc0gn30/creatorplaybooks",
+      "live_url": "https://creatorplaybooks.netlify.app",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/creatorplaybooks/",
+      "version": "1.0.0",
+      "pull": "creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status",
+      "execution_type": "browser",
+      "runtimes": [
+        "node",
+        "vite",
+        "browser",
+        "zero-egress"
+      ],
+      "port": 5185,
+      "local_url": "http://127.0.0.1:5185"
     }
   ]
 }
