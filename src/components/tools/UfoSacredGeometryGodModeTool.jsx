@@ -526,6 +526,48 @@ l 2 3 4 5 6 7 2
     URL.revokeObjectURL(url);
   };
 
+  const handleExportGCode = () => {
+    let gcode = `( ========================================================= )\n`;
+    gcode += `( Zoth UFO Sacred Geometry Studio — CNC Toolpath            )\n`;
+    gcode += `( Preset: ${selectedPreset.name} | Scale: ${scale} )\n`;
+    gcode += `( ========================================================= )\n`;
+    gcode += `G21 (Units: mm)\nG90 (Absolute positioning)\nG17 (XY Plane)\nG0 Z5.000 F3000\nM3 S1000\n\n`;
+
+    const segs = 48;
+    const r = 60 * scale;
+    gcode += `( Central Circle )\n`;
+    gcode += `G0 X${r.toFixed(3)} Y0.000\nG1 Z0.000 F1200\n`;
+    for (let i = 1; i <= segs; i++) {
+      const a = (i * 2 * Math.PI) / segs;
+      gcode += `G1 X${(r * Math.cos(a)).toFixed(3)} Y${(r * Math.sin(a)).toFixed(3)} F1800\n`;
+    }
+    gcode += `G0 Z5.000\n\n`;
+
+    for (let ring = 1; ring <= rings; ring++) {
+      for (let i = 0; i < 6; i++) {
+        const theta = (i * Math.PI) / 3;
+        const cx = ring * r * Math.cos(theta);
+        const cy = ring * r * Math.sin(theta);
+        gcode += `( Petal Circle Ring ${ring} Petal ${i + 1} )\n`;
+        gcode += `G0 X${(cx + r).toFixed(3)} Y${cy.toFixed(3)}\nG1 Z0.000 F1200\n`;
+        for (let j = 1; j <= segs; j++) {
+          const a = (j * 2 * Math.PI) / segs;
+          gcode += `G1 X${(cx + r * Math.cos(a)).toFixed(3)} Y${(cy + r * Math.sin(a)).toFixed(3)} F1800\n`;
+        }
+        gcode += `G0 Z5.000\n\n`;
+      }
+    }
+
+    gcode += `M5\nG0 Z20.000\nG0 X0 Y0\nM2\n`;
+    const blob = new Blob([gcode], { type: 'text/x-gcode;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedPreset.id}_toolpath.gcode`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleCopyAST = () => {
     const ast = {
       preset: selectedPreset.id,
@@ -753,6 +795,15 @@ l 2 3 4 5 6 7 2
                     sx={{ fontFamily: mono, fontSize: '0.75rem', borderColor: cyan, color: cyan }}
                   >
                     DXF CAD
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<PrecisionManufacturingIcon />}
+                    onClick={handleExportGCode}
+                    sx={{ fontFamily: mono, fontSize: '0.75rem', borderColor: '#10B981', color: '#10B981' }}
+                  >
+                    G-Code CNC
                   </Button>
                 </Stack>
               </Stack>
