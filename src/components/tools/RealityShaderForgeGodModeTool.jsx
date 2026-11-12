@@ -233,8 +233,53 @@ white   = "#F5F0E8"`;
 }`;
   }, [realityId, themeName, primaryHex, secondaryHex, bgVoidHex, cornerRadius, particleSpeed, nodeDensity, activeTheme.botName]);
 
-  const activeExportText = activeTab === 0 ? kdeColorsFile : activeTab === 1 ? alacrittyToml : cssVariablesExport;
-  const activeExportExt = activeTab === 0 ? 'colors' : activeTab === 1 ? 'toml' : 'css';
+  const glslFragExport = useMemo(() => {
+    const rgbP = hexToRgbTuple(primaryHex).split(',').map(n => (parseInt(n,10)/255).toFixed(4));
+    const rgbS = hexToRgbTuple(secondaryHex).split(',').map(n => (parseInt(n,10)/255).toFixed(4));
+    const rgbV = hexToRgbTuple(bgVoidHex).split(',').map(n => (parseInt(n,10)/255).toFixed(4));
+    return `// Zoth Reality Kinetic Shader Fragment: ${themeName}
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+const vec3 c_primary = vec3(${rgbP[0]}, ${rgbP[1]}, ${rgbP[2]});
+const vec3 c_secondary = vec3(${rgbS[0]}, ${rgbS[1]}, ${rgbS[2]});
+const vec3 c_void = vec3(${rgbV[0]}, ${rgbV[1]}, ${rgbV[2]});
+
+void main() {
+    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+    st.x *= u_resolution.x / u_resolution.y;
+    vec2 pos = st * 3.0;
+    float wave = sin(pos.x + u_time * ${particleSpeed.toFixed(1)}) * cos(pos.y + u_time * ${(particleSpeed * 0.8).toFixed(1)}) * 0.5 + 0.5;
+    vec3 col = mix(c_void, mix(c_primary, c_secondary, wave), pow(wave, 2.0));
+    gl_FragColor = vec4(col, 1.0);
+}`;
+  }, [themeName, primaryHex, secondaryHex, bgVoidHex, particleSpeed]);
+
+  const glslVertExport = useMemo(() => {
+    return `// Zoth Standard Screen Quad Vertex Shader
+attribute vec2 a_position;
+void main() {
+    gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  }, []);
+
+  const activeExportText =
+    activeTab === 0 ? kdeColorsFile :
+    activeTab === 1 ? alacrittyToml :
+    activeTab === 2 ? cssVariablesExport :
+    activeTab === 3 ? glslFragExport :
+    glslVertExport;
+
+  const activeExportExt =
+    activeTab === 0 ? 'colors' :
+    activeTab === 1 ? 'toml' :
+    activeTab === 2 ? 'css' :
+    activeTab === 3 ? 'frag' :
+    'vert';
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
@@ -252,6 +297,16 @@ white   = "#F5F0E8"`;
     a.download = `zoth-${realityId}-theme.${activeExportExt}`;
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleCaptureFrame = () => {
+    const canvas = shaderCanvasRef.current;
+    if (!canvas) return;
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zoth_reality_${realityId}_frame.png`;
+    a.click();
   };
 
   return (
@@ -494,6 +549,23 @@ white   = "#F5F0E8"`;
                   />
                 </Grid>
               </Grid>
+
+              <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={handleCaptureFrame}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.7rem',
+                    color: '#38BDF8',
+                    borderColor: 'rgba(56,189,248,0.4)',
+                    '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' }
+                  }}
+                >
+                  📸 Snapshot Canvas PNG
+                </Button>
+              </Box>
             </Paper>
           </Stack>
         </Grid>
@@ -527,6 +599,8 @@ white   = "#F5F0E8"`;
               <Tab icon={<PaletteIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="KDE Plasma (.colors)" />
               <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Alacritty (.toml)" />
               <Tab icon={<CodeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Studio Reality (.css)" />
+              <Tab icon={<AutoAwesomeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="GLSL (.frag)" />
+              <Tab icon={<CodeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="GLSL (.vert)" />
             </Tabs>
           </Box>
 
