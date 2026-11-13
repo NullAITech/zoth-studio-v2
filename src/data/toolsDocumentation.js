@@ -3165,6 +3165,40 @@ export const toolsDocumentation = {
           "Three.js AsciiEffect Stage \u2014 Real-time 3D geometry rendered as ASCII character grids at 60 FPS.",
           "100% Client-Side Synthesis \u2014 Zero external network egress, no telemetry, no tracking."
       ]
+  },
+  "zoth-x-connector": {
+      "whyUse": "Provides a sovereign, local-first multi-account X (Twitter) API controller, persistent systemd timer scheduler, and Zoth Vault OAuth 1.0a/2.0 configurator bound strictly to 127.0.0.1:8152.",
+      "problemSolved": "Eliminates cloud social SaaS subscriptions and credential leakage by keeping all OAuth tokens in ~/.config/zoth-vault/ (chmod 600) while running deterministic 5-slot daily posting campaigns via systemd --user.",
+      "architecture": "Local Node.js HTTP controller on 127.0.0.1:8152 coordinating ~/.config/zoth-vault/x_campaign_state.json, x-multi-hub.service/timer (09,12,15,18,21:00:00), and the zoth-x-connector CLI binary.",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_x_connector_status",
+          "description": "Query multi-account X API status, systemd timer schedule, and trigger campaign slots.",
+          "cliExample": "zoth-x-connector --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": { "type": "string", "enum": ["status", "run", "timer-start", "timer-stop"] },
+                  "dryRun": { "type": "boolean" }
+              },
+              "required": ["action"]
+          },
+          "outputSchema": {
+              "status": "string",
+              "timerState": "string",
+              "accountsTracked": "array"
+          }
+      },
+      "quickstart": [
+          "git clone https://github.com/1nc0gn30/zoth-x-connector.git",
+          "cd zoth-x-connector && node server.mjs",
+          "zoth-x-connector --status --json"
+      ],
+      "features": [
+          "Multi-Account X API v2 Dispatcher — Supports @1nc0gn30, @zoth_os, @zothstudio, @nealfraziertech, and @dinorawrai.",
+          "Persistent Systemd User Timer — Automated 09:00, 12:00, 15:00, 18:00, and 21:00 local schedule with Persistent=true.",
+          "Zoth Vault OAuth Configurator — Credentials remain strictly on disk in ~/.config/zoth-vault/ with zero secrets in Git.",
+          "4-Step Visual Guide & 16s MP4 Showreel — Built-in walkthrough directly inside the :8152 workstation."
+      ]
   }
 };
 

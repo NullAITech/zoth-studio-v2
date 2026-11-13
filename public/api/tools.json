@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-11-12T05:00:00.000Z",
-  "tool_count": 79,
+  "generated_at": "2026-11-13T12:00:00.000Z",
+  "tool_count": 80,
   "tools": [
     {
       "id": "pixel-cast",
@@ -1585,6 +1585,27 @@
       ],
       "port": 8151,
       "local_url": "http://127.0.0.1:8151"
+    },
+    {
+      "id": "zoth-x-connector",
+      "name": "Zoth X Connector",
+      "description": "Sovereign local X (Twitter) multi-account API controller, persistent systemd timer scheduler, Zoth Vault OAuth configurator, and live campaign workstation on :8152.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zoth-x-connector",
+      "live_url": "https://zoth.nullai.tech/tools/zoth-x-connector",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-x-connector/",
+      "version": "1.0.0",
+      "pull": "zoth-x-connector --status  # or: zoth-x-connector run | zoth-x-connector timer start",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "node",
+        "cli",
+        "systemd",
+        "zero-egress"
+      ],
+      "port": 8152,
+      "local_url": "http://127.0.0.1:8152"
     }
   ]
 }
