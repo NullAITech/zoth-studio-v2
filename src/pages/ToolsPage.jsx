@@ -243,7 +243,7 @@ export default function ToolsPage() {
       <TextField
         fullWidth
         size="small"
-        placeholder="Search 77 local repositories by name, capability, or slug… (press / to focus)"
+        placeholder={`Search ${microTools.length} local repositories by name, capability, or slug… (press / to focus)`}
         inputRef={searchRef}
         inputProps={{ 'aria-label': 'Search tool repositories' }}
         value={search}

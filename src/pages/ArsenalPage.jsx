@@ -422,7 +422,7 @@ export default function ArsenalPage() {
             <TextField
               fullWidth
               size="small"
-              placeholder="Search 77 repositories by name, ID, or capability…"
+              placeholder={`Search ${masterArsenal.length} repositories by name, ID, or capability…`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
