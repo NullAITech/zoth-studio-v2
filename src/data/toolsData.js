@@ -1494,6 +1494,25 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:8151',
     version: '1.2.0',
     pull: 'zoth-obsidian-tracker --status  # or: zoth-obsidian-tracker-tui | zoth-obsidian-tracker --pillars',
+  },
+  {
+    id: 'zoth-x-connector',
+    published: true,
+    name: 'Zoth X Connector',
+    repo: 'zoth-x-connector',
+    category: 'Swarm & Core',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/zoth-x-connector',
+    liveUrl: 'https://zoth.nullai.tech/tools/zoth-x-connector',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Sovereign local X (Twitter) multi-account API controller, persistent systemd timer scheduler, Zoth Vault OAuth configurator, and live campaign workstation on :8152.',
+    localPort: 8152,
+    localUrl: 'http://127.0.0.1:8152',
+    version: '1.0.0',
+    pull: 'zoth-x-connector --status  # or: zoth-x-connector run | zoth-x-connector timer start',
   }
 ];
 
