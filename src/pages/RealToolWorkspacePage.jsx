@@ -345,27 +345,29 @@ export default function RealToolWorkspacePage() {
                 Get Tool Repository
               </Button>
 
-              <Button
-                variant="outlined"
-                href={studioRepoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<GitHubIcon />}
-                sx={{
-                  borderColor: isDark ? 'rgba(245,241,230,0.28)' : '#101828',
-                  color: primaryText,
-                  fontWeight: 700,
-                  px: 2.5,
-                  py: 1.15,
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: gold,
-                    bgcolor: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(16,24,40,0.04)',
-                  },
-                }}
-              >
-                Get Zoth Studio Repo
-              </Button>
+              {repoUrl !== studioRepoUrl && (
+                <Button
+                  variant="outlined"
+                  href={studioRepoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  startIcon={<GitHubIcon />}
+                  sx={{
+                    borderColor: isDark ? 'rgba(245,241,230,0.28)' : '#101828',
+                    color: primaryText,
+                    fontWeight: 700,
+                    px: 2.5,
+                    py: 1.15,
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: gold,
+                      bgcolor: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(16,24,40,0.04)',
+                    },
+                  }}
+                >
+                  Get Zoth Studio Repo
+                </Button>
+              )}
 
               <Button
                 component={RouterLink}

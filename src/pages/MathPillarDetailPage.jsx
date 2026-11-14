@@ -1159,9 +1159,9 @@ export class STDPPlasticityEngineWASM {
               sx={{
                 fontWeight: 700,
                 bgcolor: gold,
-                color: dark ? '#08080B' : '#101828',
+                color: dark ? '#08080B' : '#FFFFFF',
                 flex: { xs: 1, sm: 'initial' },
-                '&:hover': { bgcolor: dark ? goldLight : '#9A7209', color: dark ? '#08080B' : '#FFFFFF' }
+                '&:hover': { bgcolor: dark ? goldLight : '#6F5006', color: dark ? '#08080B' : '#FFFFFF' }
               }}
             >
               Next ({nextPillar.numeral})
@@ -1178,18 +1178,19 @@ export class STDPPlasticityEngineWASM {
           {mathPillars.map((p) => (
             <Chip
               key={p.id}
+              className={p.id === pillar.id && !dark ? 'zs-ondark' : undefined}
               label={`${p.numeral}. ${p.title}`}
               clickable
               onClick={() => navigate(`/docs/math/${p.id}`)}
               sx={{
                 fontWeight: 700,
                 bgcolor: p.id === pillar.id ? gold : (dark ? '#14141D' : '#F8FAFC'),
-                color: p.id === pillar.id ? (dark ? '#08080B' : '#101828') : textPrimary,
+                color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary,
                 border: '1px solid',
                 borderColor: p.id === pillar.id ? gold : divider,
                 px: 0.5,
                 '&:hover': {
-                  bgcolor: p.id === pillar.id ? (dark ? goldLight : '#9A7209') : (dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
+                  bgcolor: p.id === pillar.id ? (dark ? goldLight : '#6F5006') : (dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
                   color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary
                 }
               }}
