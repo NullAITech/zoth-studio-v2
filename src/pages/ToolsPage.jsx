@@ -281,6 +281,7 @@ export default function ToolsPage() {
           return (
             <Chip
               key={cat}
+              className={active && !isDark ? 'zs-ondark' : undefined}
               label={`${cat} · ${count}`}
               clickable
               onClick={() => setSelectedCat(cat)}
@@ -300,6 +301,7 @@ export default function ToolsPage() {
         })}
 
         <Chip
+          className={pinnedOnly && !isDark ? 'zs-ondark' : undefined}
           clickable
           onClick={() => setPinnedOnly((v) => !v)}
           icon={

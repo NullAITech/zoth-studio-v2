@@ -495,6 +495,7 @@ export default function ArsenalPage() {
             return (
               <Chip
                 key={cat}
+                className={isSelected && !isDark ? 'zs-ondark' : undefined}
                 clickable
                 onClick={() => setCategoryFilter(cat)}
                 label={`${cat} · ${count}`}
