@@ -51,7 +51,7 @@ Tools launch instantly in < 16ms with zero server latency.`,
 
 • npx @nullaitech/zoth status: Checks which Zoth services are up on 127.0.0.1 and whether /dev/kvm is available.
 • npx @nullaitech/zoth up: Clones Zoth Studio, installs it, and runs it at http://127.0.0.1:3000.
-• npx @nullaitech/zoth pull <tool>: Clones any of the 74 public tool repositories (77 in the catalog) from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
+• npx @nullaitech/zoth pull <tool>: Clones any of the 79 public tool repositories (80 in the catalog) from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
 
 This allows developers to inspect, modify, or embed individual tools into custom pipelines or run them as dedicated local micro-apps.`,
     summary: 'npx @nullaitech/zoth provides local CLI control to scaffold sovereign tool repositories, verify environment readiness, and run tools in standalone micro-app isolation.',
@@ -172,18 +172,18 @@ Every proposed code transformation computes a deterministic SHA-256 Merkle trie 
   },
   {
     id: 'tactical-cadres-organization',
-    q: 'What are the 5 Tactical Cadres and how are the 77 Studio tools categorized?',
+    q: 'What are the 5 Tactical Cadres and how are the 80 Studio tools categorized?',
     category: 'Architecture',
     keywords: ['cadres', '5 cadres', 'categories', 'tools', 'security', 'swarm', 'velocity', 'memory', 'crypto', 'arsenal'],
-    a: `The studio organizes its 77 Studio tools into 5 tactical domains:
+    a: `The studio organizes its 80 Studio tools into 5 tactical domains:
 
 1. Security & Recon: HexStrike vulnerability auditor, SubSweep subdomain scanner, EnvGuard secrets detector, and CyberChef format processor.
 2. Swarm & Core: 21-Agent telemetry radar, Byzantine consensus chamber, and sovereign agent communication bridge.
 3. Developer Velocity: WebGen reactive generator, SVG schematic composer, Regex Droid debugger, and WCAG contrast analyzer.
 4. Memory & Cognitive: STDP biomorphic memory matrix, 3D manifold visualizer, and semantic cluster explorer.
 5. Crypto & Identity: Argon2id secrets vault, Ed25519 identity generator, and zero-knowledge proof verifiers.`,
-    summary: '77 tools grouped into 5 dedicated cadres: Security, Swarm, Developer Velocity, Memory, and Cryptography.',
-    oracleResponse: 'The 77 tools are structured across 5 distinct tactical cadres: Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
+    summary: '80 tools grouped into 5 dedicated cadres: Security, Swarm, Developer Velocity, Memory, and Cryptography.',
+    oracleResponse: 'The 80 tools are structured across 5 distinct tactical cadres: Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
     jumpTargets: [
       { label: 'Sovereign Arsenal Matrix', path: '/arsenal', type: 'arsenal' },
       { label: 'Workstations Catalog', path: '/workstations', type: 'workstations' }

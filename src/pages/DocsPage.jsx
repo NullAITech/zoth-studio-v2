@@ -275,7 +275,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-workstations',
-        title: '13. Sovereign Arsenal Architecture (80 tools, 77 with public repos)',
+        title: '13. Sovereign Arsenal Architecture (80 tools, 79 with public repos)',
         topics: ['Enclaves & Netlify'],
         kicker: 'ARSENAL TOPOLOGY'
       },
@@ -369,7 +369,7 @@ Shannon entropy gatekeeper active on all inter-process channels.`,
 
     `npm run zoth -- pull --all
 
-Clones the 77 public catalog entries (of 80) into ./tools.
+Clones the 79 public catalog entries (of 80) into ./tools.
 Runs local invariant verification before staging tools.`
   ];
 

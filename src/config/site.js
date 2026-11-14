@@ -13,7 +13,7 @@ export const siteConfig = {
   legalName: 'NullAI Tech',
   url: 'https://zoth.nullai.tech',
   tagline: 'Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix',
-  description: `Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, ${workstations.length} sovereign developer cockpits, and ${microTools.length} micro-tools (55 in-browser + 22 CLI, 74 with public GitHub repos).`,
+  description: `Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, ${workstations.length} sovereign developer cockpits, and ${microTools.length} micro-tools (56 browser/WebGPU + 24 CLI/daemon, 79 with public GitHub repos).`,
   author: 'NullAI Tech',
   twitterHandle: '@NullAITech',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
