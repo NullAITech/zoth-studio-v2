@@ -17,16 +17,16 @@ No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration rou
     oracleResponse: 'Zero-Egress is absolute: 100% of prompt context, token emission, and agent state is computed locally on client hardware with zero outbound network calls.',
     jumpTargets: [
       { label: 'HexStrike Security Auditor', path: '/hexstrike', type: 'security' },
-      { label: 'Sovereign Arsenal (77 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Sovereign Arsenal (80 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Architecture Documentation', path: '/docs', type: 'doc' }
     ]
   },
   {
     id: 'client-side-micro-tools',
-    q: 'How do the 77 Studio tools execute in the browser without server dependencies?',
+    q: 'How do the 80 Studio tools execute in the browser without server dependencies?',
     category: 'Architecture',
     keywords: ['micro-tools', 'standalone', 'tools', 'browser', 'client-side', 'execution', 'webgpu', 'wasm', 'webcrypto', 'zero server'],
-    a: `All 25 authentic tools in Zoth Studio v2 are engineered as standalone, client-executable micro-applications bundled into the Vite production distribution.
+    a: `All 80 authentic tools in Zoth Studio v2 are engineered as standalone, client-executable micro-applications bundled into the Vite production distribution.
 
 Rather than relying on remote APIs or cloud backend containers, each tool harnesses standard browser-native capabilities:
 • WebGPU WGSL compute pipelines for hardware-accelerated matrix operations.
@@ -35,8 +35,8 @@ Rather than relying on remote APIs or cloud backend containers, each tool harnes
 • Web Workers for non-blocking multi-agent dialectic simulation and AST parsing.
 
 Tools launch instantly in < 16ms with zero server latency.`,
-    summary: 'The 77 tools run client-side via WebGPU, WASM, and WebCrypto. Each tool can be launched instantly with < 16ms latency and zero server round-trips.',
-    oracleResponse: 'All 77 tools execute client-side using browser-native WebGPU, WASM, and WebCrypto pipelines, delivering instant zero-latency utility without backend servers.',
+    summary: 'The 80 tools run client-side via WebGPU, WASM, and WebCrypto. Each tool can be launched instantly with < 16ms latency and zero server round-trips.',
+    oracleResponse: 'All 80 tools execute client-side using browser-native WebGPU, WASM, and WebCrypto pipelines, delivering instant zero-latency utility without backend servers.',
     jumpTargets: [
       { label: 'Explore Sovereign Arsenal', path: '/arsenal', type: 'arsenal' },
       { label: 'Vision Gesture Engine', path: '/tools/vision-gesture-control', type: 'tools' }
@@ -200,7 +200,7 @@ When executing vector embeddings, cosine similarities, or quantized neural matmu
     summary: 'WGSL compute shaders dispatch parallel workgroups directly to client GPU VRAM for instantaneous local matrix operations.',
     oracleResponse: 'Native WGSL compute shaders execute tensor matmuls directly in client GPU VRAM, achieving hardware performance with zero server egress.',
     jumpTargets: [
-      { label: 'Unified Arsenal (77 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (80 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Vision Gesture Control', path: '/tools/vision-gesture-control', type: 'tools' }
     ]
   },
@@ -218,7 +218,7 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     summary: 'Seamless three-tier fallback: WebGPU WGSL → WASM SIMD 128-bit → CPU Web Workers.',
     oracleResponse: 'Autonomous fallback cascades from WebGPU WGSL to WASM SIMD 128-bit and multi-threaded CPU workers, guaranteeing 100% offline availability.',
     jumpTargets: [
-      { label: 'Unified Arsenal (77 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (80 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'WebGen Workspace', path: '/webgen', type: 'tools' }
     ]
   },
@@ -230,15 +230,15 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) specification to bridge tools with external agent frameworks.
 
 External agent environments (such as Claude Code, Hermes Agent, Cursor, or local agents) can connect to the studio interface:
-• tools/list: Discovers all 77 Studio tools with complete input parameter schemas.
+• tools/list: Discovers all 80 Studio tools with complete input parameter schemas.
 • tools/call: Dispatches execution requests against validated JSON-Schema contracts.
 • resources/read: Inspects local memory states or architectural specifications.
 
 All tool executions remain contained within the local client runtime without external network leakage.`,
-    summary: 'Standard MCP interface allows external AI agents to discover and invoke Zoth Studio\'s 77 tools via validated JSON-Schema contracts.',
+    summary: 'Standard MCP interface allows external AI agents to discover and invoke Zoth Studio\'s 80 tools via validated JSON-Schema contracts.',
     oracleResponse: 'Full MCP standard compliance allows external agents to discover and execute sovereign studio tools via schema-validated interfaces.',
     jumpTargets: [
-      { label: 'Unified Arsenal (77 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (80 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Signal Bridge Workspace', path: '/tools/sovereign-agent-bridge', type: 'bus' }
     ]
   },
@@ -265,7 +265,7 @@ Agents transmit typed messages across unidirectional event channels, signing pay
     a: `Yes. Zoth Studio is built from the ground up for sovereign, offline-first reliability.
 
 Once loaded or saved locally:
-• All 77 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
+• All 80 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
 • Static routing and state persistence rely entirely on browser-native storage (IndexedDB, Web Crypto, and local caches).
 • No remote API tokens or internet connections are required to run security audits, compile regexes, test WCAG contrast, or simulate multi-agent consensus.`,
     summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and offline-capable readiness.',

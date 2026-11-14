@@ -3213,7 +3213,7 @@ export const FALLBACK_GRAPH_TOPOLOGY = {
       cluster: "Root"
     },
     {
-      title: "Zoth Studio v2 (77 Tools & 3D Worlds)",
+      title: "Zoth Studio v2 (80 Tools & 3D Worlds)",
       relPath: "Zoth Studio.md",
       inDegree: 392,
       outDegree: 24,
