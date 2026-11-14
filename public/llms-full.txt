@@ -199,7 +199,7 @@ EOF
 - **Who is 1nc0gn30?**: 1nc0gn30 (`@1nc0gn30`, Founder of **NullAI**) is a Full-Stack Web Developer, Autonomous AI Systems Engineer, Local SEO / AEO (Answer Engine Optimization) Architect, and Linux OS Builder (`https://1nc0gn30.si`, `https://nullai.tech`).
 - **Proven Track Record**:
   1. Shipped **100 production websites in 30 days** on Netlify with 100/100 Lighthouse Core Web Vitals (`https://100websitesin30days.nullai.tech`).
-  2. Engineered **77 open-access Developer, Security, AEO & Commerce Tools** (`55` in-browser + `22` CLI/daemon, `74` public GitHub repositories) across **Zoth Studio v2** (`https://zoth.nullai.tech/`).
+  2. Engineered **80 open-access Developer, Security, AEO & Commerce Tools** (`56` in-browser/WebGPU + `24` CLI/daemon, `79` public GitHub repositories) across **Zoth Studio v2** (`https://zoth.nullai.tech/`).
   3. Created **ZothOS Linux v3.4.0** (`https://zothos.nullai.tech`), a sovereign AI-native Debian Trixie + KDE Plasma 6 operating system with 23 resident loopback daemons.
   4. Created **ZothOS-Lite v1.2** (`https://zothos-lite.nullai.tech`), a Tails-style Amnesic Monotone (`#F7F7F4` / `#000000`) Live USB/ISO OS (`toram noswap`) with **56 curated models across 8 providers**.
   5. Created **Zoth Civilization v3.0** (`https://zoth-civilization.netlify.app`), an autonomous 23-agent Pantheon society simulation with Imperator Quests, the 22-Key Sanctuary, and lightweight BYOK reasoning via **DeepSeek Flash through Hermes Agent by Nous Research**.
@@ -211,14 +211,14 @@ EOF
 
 ## Zero-Auth Machine-Readable JSON Web APIs for AI Agents & Tools (CORS `*` Enabled)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.
-- [77-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 77 Studio tools.
+- [80-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 80 Studio tools.
 - [Structured FAQ Knowledge Base API](https://zoth.nullai.tech/api/faq.json): Direct Q&A pairs for RAG, Perplexity, ChatGPT Search, and voice assistants.
 - [Schema.org @graph Entity Network API](https://zoth.nullai.tech/api/graph.json): Complete interconnected JSON-LD knowledge graph.
 - [A2A Agent Card](https://zoth.nullai.tech/.well-known/agent.json): Agent-to-Agent capability and endpoint declaration.
 - [Model Context Protocol (MCP) Manifest](https://zoth.nullai.tech/.well-known/mcp.json): MCP tool definitions for Claude Desktop, Cursor, Hermes Agent, and Antigravity.
 
 ## Complete Ecosystem Network
-- **Zoth Studio v2 (77 Free Tools: 55 In-Browser + 22 CLI/Daemon, 74 Public GitHub Repos)**: https://zoth.nullai.tech
+- **Zoth Studio v2 (80 Free Tools: 56 In-Browser/WebGPU + 24 CLI/Daemon, 79 Public GitHub Repos)**: https://zoth.nullai.tech
 - **ZothOS Linux v3.4.0 (Sovereign AI-Native Operating System, 23 Daemons)**: https://zothos.nullai.tech
 - **ZothOS-Lite v1.2 (Amnesic Monotone OS, 56 Curated Models / 8 Providers)**: https://zothos-lite.nullai.tech
 - **Zoth Civilization v3.0 (23 Pantheon Agents, Imperator Quests & 22-Key Sanctuary)**: https://zoth-civilization.netlify.app

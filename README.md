@@ -92,7 +92,7 @@ Prebuilt desktop bundles and standalone binaries are published on [**GitHub Rele
 ```mermaid
 flowchart TD
     subgraph Studio["Zoth Studio v2 (React 19 + Vite 5 + MUI v5)"]
-        Index["77-Tool Repository Directory (/tools & /arsenal)"]
+        Index["80-Tool Repository Directory (/tools & /arsenal)"]
         Dossiers["Local System Dossiers (/swarm, /memory, /hexstrike, /adytum, /webgen, /ax, /zoth-os)"]
         Docs["Technical Reference & Six Math Pillars (/docs & /docs/math/*)"]
         Intro["Two-Shutter U+2800 Braille + Bayer 8x8 Aperture Engine"]
@@ -178,14 +178,14 @@ zoth-studio-v2/
 ├── docs/                           # Architectural & protocol documentation
 ├── netlify/                        # Edge/serverless configuration
 ├── public/
-│   ├── api/tools.json              # Canonical 77-tool machine-readable registry
+│   ├── api/tools.json              # Canonical 80-tool machine-readable registry
 │   ├── llms.txt & llms-full.txt    # Answer-engine & LLM discovery manifests
 │   ├── robots.txt & ai.txt         # Search and AI crawler directives
-│   └── sitemap.xml                 # Synchronized 146-route XML sitemap
+│   └── sitemap.xml                 # Synchronized 149-route XML sitemap
 ├── scripts/
-│   ├── prerender.mjs               # Static HTML + Schema.org JSON-LD prerenderer (146 routes)
+│   ├── prerender.mjs               # Static HTML + Schema.org JSON-LD prerenderer (149 routes)
 │   ├── generate-sitemap.mjs        # Sitemap generator
-│   ├── registry-check.py           # 77-tool registry & port collision gate
+│   ├── registry-check.py           # 80-tool registry & port collision gate
 │   ├── test-arsenal.mjs            # Prerendered tool route & schema auditor
 │   ├── test-ground-truth.mjs       # Cryptographic & mathematical ground-truth suite
 │   ├── test-serve.mjs              # Loopback HTTP security & traversal test harness
@@ -197,7 +197,7 @@ zoth-studio-v2/
 │   │   ├── Navbar.jsx & Footer.jsx     # High-contrast navigation & attribution chrome
 │   │   └── MotionReveal.jsx            # Spring/stagger reveal primitives
 │   ├── data/
-│   │   ├── toolsData.js            # 77-tool metadata & cadre definitions
+│   │   ├── toolsData.js            # 80-tool metadata & cadre definitions
 │   │   └── toolsDocumentation.js   # Per-tool CLI, architecture & usage specs
 │   ├── motion/
 │   │   ├── AsciiBrailleDitherEngine.jsx # 60fps U+2800 Braille + Bayer 8x8 SDF stage

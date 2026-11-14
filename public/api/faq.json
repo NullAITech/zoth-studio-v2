@@ -19,7 +19,7 @@
       "name": "What is Zoth Studio?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Zoth Studio (https://zoth.nullai.tech) is a local-first AI studio with 77 tools: 55 run in the browser and 22 are CLI tools. It also groups tools into 43 workstations."
+        "text": "Zoth Studio (https://zoth.nullai.tech) is a local-first AI studio with 80 tools: 56 run in the browser/WebGPU and 24 are CLI tools. It also groups tools into 43 workstations."
       }
     },
     {
@@ -43,7 +43,7 @@
       "name": "Where is the source code?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Source lives on GitHub under https://github.com/NullAITech and https://github.com/1nc0gn30. 74 of the 77 tools have public GitHub source repositories."
+        "text": "Source lives on GitHub under https://github.com/NullAITech and https://github.com/1nc0gn30. 79 of the 80 tools have public GitHub source repositories."
       }
     },
     {
