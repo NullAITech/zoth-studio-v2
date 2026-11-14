@@ -50,6 +50,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
           {mathTiers.map((name) => (
             <Chip
               key={name}
+              className={tier === name && !isDark ? 'zs-ondark' : undefined}
               label={name}
               clickable
               onClick={() => setTier(name)}
