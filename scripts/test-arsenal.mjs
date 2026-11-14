@@ -65,7 +65,7 @@ async function checkUrlStatus(urlStr) {
 
 async function main() {
   console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
-  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 79-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
+  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 80-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
   console.log(`${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}\n`);
 
   if (!fs.existsSync(toolsJsonPath)) {
