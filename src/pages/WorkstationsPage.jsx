@@ -508,6 +508,7 @@ export default function WorkstationsPage() {
           return (
             <Chip
               key={t.id}
+              className={active && !isDark ? 'zs-ondark' : undefined}
               label={t.label}
               clickable
               onClick={() => setTypeFilter(t.id)}
@@ -527,6 +528,7 @@ export default function WorkstationsPage() {
       {/* Band Filter Chips */}
       <Box sx={{ display: 'flex', gap: 0.9, flexWrap: 'wrap', mb: 3.5 }}>
         <Chip
+          className={band === 'All' && !isDark ? 'zs-ondark' : undefined}
           label={`All Bands · ${workstations.length}`}
           clickable
           onClick={() => setBand('All')}
@@ -544,6 +546,7 @@ export default function WorkstationsPage() {
           return (
             <Chip
               key={item}
+              className={active && !isDark ? 'zs-ondark' : undefined}
               label={`${item} · ${bandCounts[item] || 0}`}
               clickable
               onClick={() => setBand(item)}
