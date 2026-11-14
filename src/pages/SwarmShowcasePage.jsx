@@ -163,7 +163,7 @@ export default function SwarmShowcasePage() {
               Zoth Egregore (DeepSeek-Flash + Hermes)
             </Typography>
             <Typography sx={{ fontSize: '0.92rem', lineHeight: 1.68, color: textSecondary, mb: 2.5, flex: 1 }}>
-              Our sovereign coding and systems agent built atop Nous Research Hermes Agent and DeepSeek-Flash, engineered to invoke all 77 local Zoth Studio CLI & MCP tools natively on ZothOS. Benchmarks, test harnesses, and HuggingFace weights are in active preparation.
+              Our sovereign coding and systems agent built atop Nous Research Hermes Agent and DeepSeek-Flash, engineered to invoke all 80 local Zoth Studio CLI & MCP tools natively on ZothOS. Benchmarks, test harnesses, and HuggingFace weights are in active preparation.
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
               <Button

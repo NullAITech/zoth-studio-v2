@@ -121,7 +121,7 @@ export default function RealToolWorkspacePage() {
               textTransform: 'none',
             }}
           >
-            Browse All 77 Repositories
+            Browse All {microTools.length} Repositories
           </Button>
         </Paper>
       </Container>
@@ -164,7 +164,7 @@ export default function RealToolWorkspacePage() {
             '&:hover': { color: primaryText, bgcolor: 'transparent' },
           }}
         >
-          All 77 Repositories
+          All {microTools.length} Repositories
         </Button>
 
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>

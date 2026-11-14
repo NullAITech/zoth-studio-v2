@@ -113,7 +113,7 @@ export default function ZothOSShowcasePage() {
         { key: 'Desktop Shell', value: 'KDE Plasma 6 (4 Deterministic Folders)' },
         { key: 'Lite Edition', value: 'ZothOS-Lite v1.2 (Amnesic Monotone)' },
         { key: 'Firewall Posture', value: 'UFW Default-Deny + Loopback Only' },
-        { key: 'Preloaded Arsenal', value: 'All 77 Zoth Studio CLI & Daemon Tools' },
+        { key: 'Preloaded Arsenal', value: 'All 80 Zoth Studio CLI & Daemon Tools' },
         { key: 'MCP Catalog', value: '163 Servers Indexed (All Off by Default)' },
       ]}
       quickstartLines={[

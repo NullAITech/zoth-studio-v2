@@ -226,7 +226,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Clone the unified Zoth Studio v2 workspace orchestrating all 77 local tools, STDP neural memory (:8094), and Pantheon swarm (:9393).
+              Clone the unified Zoth Studio v2 workspace orchestrating all 80 local tools, STDP neural memory (:8094), and Pantheon swarm (:9393).
             </Typography>
 
             <Box

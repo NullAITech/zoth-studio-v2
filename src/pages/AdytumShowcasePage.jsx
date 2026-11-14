@@ -71,7 +71,7 @@ export default function AdytumShowcasePage() {
         {
           tag: 'COMPOSABLE',
           title: 'Native Zoth Studio Integration',
-          desc: 'Chains seamlessly with Neuro-Memory (:8094), Pantheon Swarm (:8141), and all 77 local CLI tools in the Zoth Studio arsenal.',
+          desc: 'Chains seamlessly with Neuro-Memory (:8094), Pantheon Swarm (:8141), and all 80 local CLI tools in the Zoth Studio arsenal.',
         },
       ]}
       funnelToolTitle="Adytum Workflow Engine"

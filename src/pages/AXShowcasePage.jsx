@@ -76,7 +76,7 @@ export default function AXShowcasePage() {
         { key: 'MCP Discovery', value: '/.well-known/mcp.json' },
         { key: 'Agent Descriptor', value: '/.well-known/agent.json' },
         { key: 'LLM Context Map', value: '/llms.txt & /llms-full.txt' },
-        { key: 'Tool Registry', value: 'public/api/tools.json (77 Tools)' },
+        { key: 'Tool Registry', value: 'public/api/tools.json (80 Tools)' },
         { key: 'Integrity Gate', value: 'python3 scripts/registry-check.py' },
         { key: 'Structured Graph', value: 'Schema.org JSON-LD @graph' },
       ]}
