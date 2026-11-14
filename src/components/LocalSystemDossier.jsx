@@ -295,29 +295,31 @@ export default function LocalSystemDossier({
               </Button>
             )}
 
-            <Button
-              component="a"
-              href="https://github.com/NullAITech/zoth-studio-v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="outlined"
-              startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
-              sx={{
-                borderColor: accentBorder,
-                color: accent,
-                bgcolor: accentWash,
-                fontFamily: mono,
-                fontWeight: 700,
-                fontSize: '0.82rem',
-                textTransform: 'none',
-                px: 2.25,
-                py: 1.1,
-                borderRadius: 1.5,
-                '&:hover': { borderColor: accent, bgcolor: accentWash },
-              }}
-            >
-              Get Zoth Studio Repo
-            </Button>
+            {repoUrl !== 'https://github.com/NullAITech/zoth-studio-v2' && (
+              <Button
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
+                sx={{
+                  borderColor: accentBorder,
+                  color: accent,
+                  bgcolor: accentWash,
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.82rem',
+                  textTransform: 'none',
+                  px: 2.25,
+                  py: 1.1,
+                  borderRadius: 1.5,
+                  '&:hover': { borderColor: accent, bgcolor: accentWash },
+                }}
+              >
+                Get Zoth Studio Repo
+              </Button>
+            )}
 
             {docsRoute && (
               <Button
