@@ -1036,7 +1036,7 @@ ${paneLines}`;
                       />
                     </Stack>
                     <Typography sx={{ fontSize: '0.84rem', color: tokens.muted, lineHeight: 1.6, mb: 1.5 }}>
-                      Pair any Swarm Multiplexer pane with <strong>EGREGORE</strong> on <code>127.0.0.1:8147/v1</code>: one OpenAI-compatible face backed by 3,456 co-prime Pantheon lenses, zero-call Beta-posterior stopping, a distilled Design-Director + Formal-Logic Codex, and native routing across 77 ZothOS &amp; Zoth Studio tools.
+                      Pair any Swarm Multiplexer pane with <strong>EGREGORE</strong> on <code>127.0.0.1:8147/v1</code>: one OpenAI-compatible face backed by 3,456 co-prime Pantheon lenses, zero-call Beta-posterior stopping, a distilled Design-Director + Formal-Logic Codex, and native routing across 80 ZothOS &amp; Zoth Studio tools.
                     </Typography>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: tokens.gold, mb: 1.5 }}>
                       ROADMAP: Expanded Tests Coming Soon · Public Benchmarks Coming Soon · HuggingFace Coming Soon
