@@ -673,7 +673,10 @@ ${oracleResult.faq.a}`;
                     fontWeight: 750,
                     fontSize: '0.8rem',
                     bgcolor: active ? gold.accent : theme.palette.background.paper,
-                    color: active ? (isDark ? '#08080B !important' : '#FFFFFF !important') : theme.palette.text.primary,
+                    color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                    '& .MuiChip-label': {
+                      color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                    },
                     border: '1px solid',
                     borderColor: active ? gold.accent : theme.palette.divider,
                     transition: 'all 0.18s ease',
