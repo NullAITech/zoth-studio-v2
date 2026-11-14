@@ -33,7 +33,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: 'Pre-Installed Local Tool Arsenal',
-    zoth: 'Zoth Studio v2 (77-tool local CLI & daemon suite)',
+    zoth: 'Zoth Studio v2 (80-tool local CLI & daemon suite)',
     kali: 'None',
     parrot: 'None',
     ubuntu: 'None',
@@ -76,10 +76,10 @@ export default function ZothOSShowcasePage() {
     <LocalSystemDossier
       tone="gold"
       kicker="ZOTH OS v3.4.0 & ZOTHOS-LITE v1.2"
-      badges={['DEBIAN 13 TRIXIE', 'KDE PLASMA 6', '77 TOOLS PRE-INSTALLED']}
+      badges={['DEBIAN 13 TRIXIE', 'KDE PLASMA 6', '80 TOOLS PRE-INSTALLED']}
       title="The Sovereign AI & Security"
       accentWord="Linux Distribution."
-      subtitle="Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire 77-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot."
+      subtitle="Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire 80-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot."
       cloneCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
       repoUrl="https://github.com/NullAITech/zoth-os"
       repoLabel="Get ZothOS Build Repo"
@@ -160,7 +160,7 @@ export default function ZothOSShowcasePage() {
       ]}
       funnelToolTitle="ZothOS v3.4.0 & ZothOS-Lite v1.2"
       funnelToolTag="SOVEREIGN LINUX OS"
-      funnelToolDesc="Debian 13 + KDE Plasma 6 operating system pre-loaded with all 77 Zoth Studio tools, local LLM runtimes, and security parity."
+      funnelToolDesc="Debian 13 + KDE Plasma 6 operating system pre-loaded with all 80 Zoth Studio tools, local LLM runtimes, and security parity."
     >
       {/* Clean Distribution Comparison Matrix */}
       <Box>

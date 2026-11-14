@@ -48,7 +48,7 @@ const primaryNav = [
 ];
 
 const moreSystemItems = [
-  { label: 'Tool Repositories (77)', path: '/tools', desc: 'Searchable repository catalog & CLI specs' },
+  { label: 'Tool Repositories (80)', path: '/tools', desc: 'Searchable repository catalog & CLI specs' },
   { label: 'Architecture Dossiers (43)', path: '/workstations', desc: 'Studio modules, cadres & daemon topology' },
   { label: 'Adytum Chamber', path: '/adytum', desc: '22-key deterministic planning specification' },
   { label: 'Byzantine Consensus', path: '/consensus', desc: 'Multi-model verification & quorum protocol' },

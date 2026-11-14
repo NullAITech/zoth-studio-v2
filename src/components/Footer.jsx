@@ -20,7 +20,7 @@ export default function Footer() {
   const footerBg = isDark ? '#06070B' : '#F3EFE6';
 
   const systems = [
-    { label: 'The Sovereign Arsenal (77)', to: '/arsenal' },
+    { label: 'The Sovereign Arsenal (80)', to: '/arsenal' },
     { label: 'ZothOS v3.4.0 & Lite v1.2', to: '/zoth-os' },
     { label: 'Pantheon Swarm (:9393)', to: '/swarm' },
     { label: 'Neuro-Memory (:8094)', to: '/memory' },
