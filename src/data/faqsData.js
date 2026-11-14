@@ -279,12 +279,12 @@ Once loaded or saved locally:
     id: 'netlify-prerender-aeo',
     q: 'How does Netlify production deployment prerender static routes for search and answer engines?',
     category: 'CLI & Deployment',
-    keywords: ['netlify', 'prerender', 'static', 'routes', '141', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
+    keywords: ['netlify', 'prerender', 'static', 'routes', '149', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
     a: `Netlify production deployments compile with an automated prerendering pipeline (npm run build -> vite build && node scripts/prerender.mjs).
 
-The engine generates static HTML snapshots for all 141 studio routes—including 77 Studio tools, interactive flagship workspaces, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
-    summary: 'Prerenders 141 static route shells with structured Schema.org JSON-LD for instant load times and search crawler indexing.',
-    oracleResponse: '141 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata, enabling instant load times and authoritative AEO indexing.',
+The engine generates static HTML snapshots for all 149 studio routes—including 80 Studio tools, interactive flagship workspaces, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
+    summary: 'Prerenders 149 static route shells with structured Schema.org JSON-LD for instant load times and search crawler indexing.',
+    oracleResponse: '149 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata, enabling instant load times and authoritative AEO indexing.',
     jumpTargets: [
       { label: 'Agent AX Discovery Manifest', path: '/ax', type: 'ax' },
       { label: 'Full Engineering Documentation', path: '/docs', type: 'doc' }
