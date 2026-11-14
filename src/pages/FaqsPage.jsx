@@ -667,6 +667,7 @@ ${oracleResult.faq.a}`;
                 <Chip
                   key={cat}
                   label={`${cat} (${count})`}
+                  className={active ? 'zs-ondark' : undefined}
                   clickable
                   onClick={() => setSelectedCat(cat)}
                   sx={{

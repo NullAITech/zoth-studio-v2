@@ -374,7 +374,7 @@ export default function WorkstationsPage() {
               >
                 Zoth Studio v2
               </Box>
-              . Clone the repository to run the local Express/IPC server on <code>127.0.0.1:3000</code>, or run all 77 tools natively inside ZothOS.
+              . Clone the repository to run the local Express/IPC server on <code>127.0.0.1:3000</code>, or run all 80 tools natively inside ZothOS.
             </Typography>
           </HeroItem>
         </Box>
@@ -388,7 +388,7 @@ export default function WorkstationsPage() {
             desc: 'Local operator views inside Zoth Studio v2 for composing agent DAGs, inspecting ASTs, and supervising local inference.',
           },
           {
-            title: '2. Standalone Repositories (77)',
+            title: '2. Standalone Repositories (80)',
             desc: 'Independent Git repositories with dedicated CLI binaries and MCP interfaces that run without browser dependencies.',
           },
           {
