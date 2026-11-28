@@ -49,6 +49,7 @@ import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
 import MissionControlGodModeTool from '../components/tools/MissionControlGodModeTool';
 import NetlifyAxConsoleGodModeTool from '../components/tools/NetlifyAxConsoleGodModeTool';
 import NetrunnerMemoryHubGodModeTool from '../components/tools/NetrunnerMemoryHubGodModeTool';
+import NotesReviewerGodModeTool from '../components/tools/NotesReviewerGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
@@ -271,7 +272,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cyberpunk-hud': CyberpunkHudGodModeTool,
   'edge-forge': EdgeForgeGodModeTool,
   'chronicle': ChronicleHubGodModeTool,
-  'notes-reviewer': NeuroMemoryGodModeTool,
+  'notes-reviewer': NotesReviewerGodModeTool,
   'brand': BrandAssetsForgeGodModeTool,
   'vision-link': VisionKinematicsGodModeTool,
   'web3-hub': SovereignBridgeGodModeTool,

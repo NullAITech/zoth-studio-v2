@@ -110,6 +110,8 @@ const SAMPLE_ROUTES = [
   '/tools/netlify-ax',
   '/workstations/netrunner-memory',
   '/tools/netrunner-memory',
+  '/workstations/notes-reviewer',
+  '/tools/notes-reviewer',
   '/tools/neuro-memory-daemon',
   '/docs/math/linear',
   '/docs/math/calculus',

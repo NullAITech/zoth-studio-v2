@@ -4729,6 +4729,42 @@ export const toolsDocumentation = {
           "Strictly Read-Only Repo & CLI Inspector — Inspects netlify/edge-functions/*, netlify/functions/*, public/ AEO manifests, dist/ route counts, and netlify --version (<= 1200ms) while explicitly forbidding reads of ~/.config/netlify/config.json, .env*, or NETLIFY_AUTH_TOKEN.",
           "Copy-Only Safe CLI Playbooks & Formula-Safe Exports — Generates sanitized netlify CLI commands (netlify build --dry, netlify dev, netlify env:set) and hardened netlify.toml/_redirects/_headers templates plus JSON, Markdown, and CSV exports with SHA-256 receipts."
       ]
+  },
+  "notes-reviewer": {
+      "whyUse": "Zoth Visual Notes & Agent Reviewer (v1.0.0) gives engineers a deterministic, zero-egress workstation for turning raw fleet markdown into an outline, action-item ledger, link inventory, 7-point synthesis review, and A/B consensus diff — entirely in the browser over 127.0.0.1:3000.",
+      "problemSolved": "Fleet notes rot into untracked decisions: buried action items, malformed links, unbalanced code fences, and unreviewed revisions. Notes Reviewer extracts headings, tasks, and links, scores synthesis quality, and renders a line-level consensus diff without any note ever leaving the loopback workstation.",
+      "architecture": "Pure client-side Studio workstation (NotesReviewerGodModeTool.jsx): zero-dependency outline/task/link extractors, 7-check synthesis scorer, and LCS line diff, all computed in React useMemo. No backend, no Studio API calls, no network egress — clipboard and file download only.",
+      "aiAgentProtocol": {
+          "mcpTool": "None — fully client-side (paste notes into /workstations/notes-reviewer)",
+          "description": "Deterministic markdown extraction, synthesis review, and consensus diff over 127.0.0.1:3000 with no data leaving the browser.",
+          "cliExample": "zoth open notes-reviewer --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "source": { "type": "string", "description": "Source markdown notes (A)" },
+                  "revision": { "type": "string", "description": "Revision markdown notes (B) for consensus diff" }
+              }
+          },
+          "outputSchema": {
+              "synthesisScore": "number",
+              "outline": "array",
+              "actionItems": "array",
+              "consensusDiff": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open notes-reviewer",
+          "zoth open notes-reviewer --json"
+      ],
+      "cliCommands": [
+          "zoth open notes-reviewer --json                                             # Print canonical Notes Reviewer route and local/production URLs"
+      ],
+      "features": [
+          "Markdown Knowledge Extraction — Headings outline, check-box action ledger with done counts, link inventory, fenced-block and word telemetry.",
+          "7-Point Synthesis Review — H1 presence, action items, link well-formedness, balanced fences, zero hype adjectives, next-step references, and note depth with a live 0-100 score.",
+          "A/B Consensus Diff — LCS line-level added/removed rendering between source and revision with live counts.",
+          "Copy & Download Review Bundle — One-click clipboard copy plus notes-review.json download; nothing is transmitted anywhere."
+      ]
   }
 };
 

@@ -110,9 +110,11 @@ export const workstations = [
   {
     id: "notes-reviewer",
     name: "Zoth Visual Notes & Agent Reviewer",
-    path: "/studio/notes-reviewer.html",
+    path: "/workstations/notes-reviewer",
     band: "Observe",
     type: "cockpit",
+    version: "1.0.0",
+    pullCommand: "zoth open notes-reviewer",
     description: "Multi-agent markdown knowledge extraction, synthesis review, and consensus diffs.",
     alsoInApp: "/workstations/notes-reviewer"
   },
