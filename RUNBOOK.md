@@ -22,7 +22,7 @@ ZothOS operates as a sovereign, zero-external-dependency local developer and age
        +-----------v-----------+       +-----------v-----------+       +-----------v-----------+
        |   Synaptic Memory     |       | Sovereign IPC Bridge  |       |   FinOps Sentinel     |
        |  UI:  127.0.0.1:8094  |       |   127.0.0.1:8102      |       |  Radar: 127.0.0.1:8110|
-       |  REST:127.0.0.1:8788  |       |  (Mesh Consensus)     |       |  Proxy: 127.0.0.1:8111|
+       |  REST:127.0.0.1:8094  |       |  (Mesh Consensus)     |       |  Proxy: 127.0.0.1:8111|
        +-----------+-----------+       +-----------+-----------+       +-----------+-----------+
                    |                               |                               |
                    +-------------------------------+-------------------------------+
@@ -142,7 +142,7 @@ ZothOS provides unified process management through systemd user units and the `z
 ### Core Systemd Units:
 - **Zoth Studio Hub** (`:3000`): `systemctl --user status zoth-studio.service`
 - **Sovereign Signal Bridge** (`:8102`): `systemctl --user status sovereign-agent-bridge.service`
-- **Neuro-Memory REST API** (`:8788`): `systemctl --user status neuro-memory-rest.service`
+- **Neuro-Memory REST API** (`:8094`, standby alias — live port held by `neuro-memory-daemon` PID, do not enable while held): `systemctl --user status neuro-memory-rest.service`
 - **Neuro-Memory Studio UI** (`:8094`): `sudo systemctl status neuro-memory.service`
 - **Ollama Engine** (`:11434`): `sudo systemctl status ollama.service`
 - **Agent Budget Sentinel Radar** (`:8110`): Running as background daemon
